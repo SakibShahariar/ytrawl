@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="ytrawl">
+  <schema id="org.gnome.shell.extensions.ytrawl" path="/org/gnome/shell/extensions/ytrawl/">
+
+    <key name="download-dir" type="s">
+      <default>''</default>
+      <summary>Download directory</summary>
+      <description>Where media is saved. Empty uses ~/Downloads.</description>
+    </key>
+
+    <key name="auto-clipboard" type="b">
+      <default>true</default>
+      <summary>Read URL from clipboard on open</summary>
+    </key>
+
+    <key name="auto-extract-clipboard" type="b">
+      <default>true</default>
+      <summary>Extract a pasted URL automatically</summary>
+    </key>
+
+    <key name="clear-input-after-download" type="b">
+      <default>true</default>
+      <summary>Clear input after a successful download</summary>
+    </key>
+
+    <key name="audio-format" type="s">
+      <default>'best'</default>
+      <summary>Default audio format for new downloads</summary>
+    </key>
+
+    <key name="advanced-visible" type="b">
+      <default>false</default>
+      <summary>Whether the Advanced section is expanded</summary>
+    </key>
+
+    <key name="output-template" type="s">
+      <default>'%(title)s.%(ext)s'</default>
+      <summary>yt-dlp output template</summary>
+    </key>
+
+    <key name="cookies" type="s">
+      <default>''</default>
+      <summary>Netscape-format cookies file path</summary>
+    </key>
+
+    <key name="cookies-from-browser" type="s">
+      <default>''</default>
+      <summary>Browser to read live cookies from</summary>
+    </key>
+
+    <key name="cookies-profile" type="s">
+      <default>''</default>
+      <summary>Browser profile name or config path</summary>
+    </key>
+
+    <key name="proxy" type="s">
+      <default>''</default>
+      <summary>Proxy URL for yt-dlp</summary>
+    </key>
+
+    <key name="rate-limit" type="s">
+      <default>''</default>
+      <summary>Download rate limit</summary>
+    </key>
+
+    <key name="concurrent-fragments" type="s">
+      <default>''</default>
+      <summary>Number of concurrent fragments</summary>
+    </key>
+
+    <key name="custom-format-selector" type="s">
+      <default>''</default>
+      <summary>Custom yt-dlp format selector</summary>
+    </key>
+
+    <key name="custom-args" type="s">
+      <default>''</default>
+      <summary>Extra yt-dlp arguments</summary>
+    </key>
+
+    <key name="download-thumbnail" type="b">
+      <default>false</default>
+      <summary>Save the thumbnail as a JPG next to the download</summary>
+    </key>
+
+    <key name="embed-thumbnail" type="b">
+      <default>false</default>
+      <summary>Embed the thumbnail into the file metadata</summary>
+    </key>
+
+    <key name="embed-subs" type="b">
+      <default>false</default>
+      <summary>Embed subtitles into the video</summary>
+    </key>
+
+    <key name="include-auto-subs" type="b">
+      <default>false</default>
+      <summary>Include auto-generated captions</summary>
+    </key>
+
+    <key name="prefer-drc" type="b">
+      <default>false</default>
+      <summary>Prefer DRC audio for more consistent loudness</summary>
+    </key>
+
+    <key name="sponsor-block" type="b">
+      <default>false</default>
+      <summary>Skip sponsor segments via SponsorBlock</summary>
+    </key>
+
+    <key name="sponsor-block-categories" type="as">
+      <default>['sponsor', 'selfpromo', 'interaction']</default>
+      <summary>SponsorBlock categories to remove</summary>
+    </key>
+
+    <key name="use-archive" type="b">
+      <default>false</default>
+      <summary>Skip already-downloaded media</summary>
+    </key>
+
+    <key name="save-history" type="b">
+      <default>true</default>
+      <summary>Remember downloaded URLs</summary>
+    </key>
+
+    <key name="history" type="as">
+      <default>[]</default>
+      <summary>Download history</summary>
+    </key>
+
+    <key name="sub-language" type="s">
+      <default>'all'</default>
+      <summary>Subtitle language</summary>
+    </key>
+
+    <key name="post-download-action" type="s">
+      <default>'nothing'</default>
+      <summary>Action after a download completes</summary>
+    </key>
+
+  </schema>
+</schemalist>

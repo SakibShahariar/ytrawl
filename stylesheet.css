@@ -1,0 +1,408 @@
+/* Ytrawl — panel theming.
+   Base layer uses the shell's St theme variables (@theme_*). At runtime the
+   extension loads an override stylesheet generated from ~/.config/matugen/
+   matugen-colors.css (same as update-checker@local / github-notifier@local),
+   scoped under .ytrawl-menu, which replaces the role colors below. */
+
+.ytrawl-menu { min-width: 400px; }
+
+/* ---- surface / container layers ----------------------------------- */
+
+.ytrawl-panel,
+.ytrawl-root {
+    background-color: transparent;
+}
+
+.ytrawl-scroll {
+    max-height: 640px;
+}
+
+.ytrawl-scroll StScrollBar {
+    min-width: 0;
+    width: 0;
+}
+
+.ytrawl-content {
+    padding: 0 12px 12px 12px;
+    spacing: 6px;
+}
+
+/* ---- error banner -------------------------------------------------- */
+
+.ytrawl-error {
+    background-color: rgba(230, 90, 70, 0.16);
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(240, 120, 90, 0.65);
+    border-radius: 10px;
+    padding: 8px 10px;
+    spacing: 8px;
+    margin-top: 4px;
+}
+
+.ytrawl-error-text {
+    color: #ff9d94;
+    font-weight: 500;
+}
+
+/* ---- entry ---------------------------------------------------------- */
+
+.ytrawl-entry {
+    background-color: rgba(127, 127, 127, 0.10);
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(127, 127, 127, 0.22);
+    border-radius: 8px;
+    padding: 6px 10px;
+    min-height: 34px;
+}
+
+.ytrawl-entry:focus {
+    border-color: @theme_selected_bg_color;
+    background-color: rgba(127, 127, 127, 0.12);
+}
+
+.ytrawl-icon-btn {
+    border-radius: 8px;
+    padding: 5px;
+    color: rgba(230, 230, 230, 0.8);
+}
+
+.ytrawl-icon-btn:hover,
+.ytrawl-icon-btn:focus {
+    background-color: rgba(127, 127, 127, 0.14);
+    color: #ffffff;
+}
+
+.ytrawl-icon-btn:active {
+    background-color: rgba(136, 170, 255, 0.22);
+}
+
+.ytrawl-chevron {
+    padding: 3px;
+}
+
+/* ---- hint / status --------------------------------------------------- */
+
+.ytrawl-hint {
+    color: #c9b1ff;
+    font-size: 11px;
+}
+
+.ytrawl-hint-dim {
+    color: rgba(230, 230, 230, 0.7);
+    font-size: 11px;
+}
+
+.ytrawl-hint-ok {
+    color: #a5d8b5;
+    font-size: 11px;
+}
+
+.ytrawl-hint-bad {
+    color: #ff9d94;
+    font-size: 11px;
+}
+
+.ytrawl-extracting {
+    color: #c9b1ff;
+}
+
+.ytrawl-caption {
+    color: rgba(210, 210, 210, 0.75);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+}
+
+/* ---- media card — hero, distinct from everything else -------------- */
+
+.ytrawl-card {
+    background-color: rgba(76, 71, 50, 0.95);
+    border-width: 1px;
+    border-style: solid;
+    border-color: transparent;
+    border-radius: 12px;
+    padding: 10px;
+    spacing: 12px;
+    margin-top: 2px;
+}
+
+.ytrawl-thumb-box {
+    min-width: 96px;
+    min-height: 72px;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.28);
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+.ytrawl-thumb {
+    border-radius: 8px;
+}
+
+.ytrawl-duration {
+    background-color: rgba(0, 0, 0, 0.55);
+    color: #ffffff;
+    border-radius: 4px;
+    padding: 2px 5px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.ytrawl-title {
+    color: #ebe2c6;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.ytrawl-uploader {
+    color: rgba(235, 226, 198, 0.8);
+    font-size: 11px;
+}
+
+/* ---- active-download card — surface container, not hero ------------ */
+
+.ytrawl-active-card {
+    background-color: rgba(127, 127, 127, 0.08);
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(127, 127, 127, 0.15);
+    border-radius: 12px;
+    padding: 10px;
+    spacing: 6px;
+}
+
+.ytrawl-active-card .ytrawl-title,
+.ytrawl-active-card .ytrawl-meta {
+    color: @theme_selected_bg_color;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.ytrawl-active-card .ytrawl-meta-bad {
+    color: #ff9d94;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+/* ---- pills & buttons ------------------------------------------------- */
+
+.ytrawl-pill {
+    background-color: rgba(127, 127, 127, 0.14);
+    color: @theme_text_color;
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-size: 12px;
+    transition-duration: 100ms;
+}
+
+.ytrawl-pill:hover,
+.ytrawl-pill:focus {
+    background-color: rgba(127, 127, 127, 0.24);
+}
+
+.ytrawl-pill:checked {
+    background-color: @theme_selected_bg_color;
+    color: @theme_selected_fg_color;
+    font-weight: 600;
+}
+
+.ytrawl-primary {
+    background-color: @theme_selected_bg_color;
+    color: @theme_selected_fg_color;
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-weight: 600;
+    transition-duration: 120ms;
+}
+
+.ytrawl-primary:hover,
+.ytrawl-primary:focus {
+    background-color: #7f9bd4;
+    color: #ffffff;
+}
+
+.ytrawl-primary:insensitive,
+.ytrawl-primary:disabled {
+    opacity: 0.45;
+}
+
+.ytrawl-ghost {
+    background-color: rgba(127, 127, 127, 0.14);
+    color: @theme_text_color;
+    border-radius: 10px;
+    padding: 8px 16px;
+}
+
+.ytrawl-ghost:hover,
+.ytrawl-ghost:focus {
+    background-color: rgba(127, 127, 127, 0.30);
+    color: #ffffff;
+}
+
+/* ---- accordion ------------------------------------------------------- */
+
+.ytrawl-accordion-header {
+    border-radius: 10px;
+    padding: 8px 10px;
+    margin-top: 2px;
+}
+
+.ytrawl-accordion-header:hover,
+.ytrawl-accordion-header:focus {
+    background-color: rgba(127, 127, 127, 0.10);
+}
+
+.ytrawl-accordion-title {
+    color: @theme_text_color;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+/* ---- toggles ---------------------------------------------------------- */
+
+.ytrawl-toggle-row {
+    padding: 2px 0;
+    min-height: 40px;
+    spacing: 10px;
+}
+
+.ytrawl-toggle-text {
+    spacing: 1px;
+}
+
+.ytrawl-toggle-label {
+    color: @theme_text_color;
+    font-size: 13px;
+}
+
+.ytrawl-toggle-desc {
+    color: rgba(230, 230, 230, 0.72);
+    font-size: 11px;
+}
+
+.ytrawl-switch-fallback {
+    min-width: 36px;
+    min-height: 20px;
+    border-radius: 10px;
+    background-color: rgba(127, 127, 127, 0.35);
+}
+
+.ytrawl-switch-fallback:checked {
+    background-color: @theme_selected_bg_color;
+}
+
+/* ---- dropdown ---------------------------------------------------------- */
+
+.ytrawl-dropdown {
+    background-color: rgba(127, 127, 127, 0.10);
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(127, 127, 127, 0.22);
+    border-radius: 8px;
+    padding: 6px 10px;
+    min-height: 32px;
+}
+
+.ytrawl-dropdown:hover,
+.ytrawl-dropdown:focus {
+    background-color: rgba(127, 127, 127, 0.18);
+}
+
+.ytrawl-dropdown-label {
+    color: @theme_text_color;
+}
+
+.ytrawl-dropdown-list {
+    background-color: rgba(30, 30, 30, 0.95);
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(127, 127, 127, 0.25);
+    border-radius: 10px;
+    padding: 4px;
+    margin-top: 4px;
+}
+
+.ytrawl-dropdown-item {
+    border-radius: 6px;
+    padding: 6px 10px;
+    color: @theme_text_color;
+}
+
+.ytrawl-dropdown-item:hover,
+.ytrawl-dropdown-item:checked {
+    background-color: @theme_selected_bg_color;
+    color: @theme_selected_fg_color;
+}
+
+/* ---- progress ------------------------------------------------------------ */
+
+.ytrawl-progress-track {
+    background-color: rgba(127, 127, 127, 0.18);
+    border-radius: 999px;
+}
+
+.ytrawl-progress-fill {
+    background-color: @theme_selected_bg_color;
+    border-radius: 999px;
+    transition-duration: 80ms;
+}
+
+/* ---- raw log -------------------------------------------------------------- */
+
+.ytrawl-rawlog {
+    background-color: rgba(0, 0, 0, 0.4);
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(127, 127, 127, 0.2);
+    border-radius: 10px;
+    padding: 8px 10px;
+}
+
+.ytrawl-rawlog-text {
+    font-family: monospace;
+    font-size: 10px;
+    color: rgba(230, 230, 230, 0.8);
+}
+
+/* ---- queue / playlist / history ---------------------------------------- */
+
+.ytrawl-queue-item {
+    background-color: rgba(127, 127, 127, 0.08);
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(127, 127, 127, 0.15);
+    border-radius: 8px;
+    padding: 6px 8px;
+    spacing: 8px;
+}
+
+.ytrawl-queue-text {
+    color: @theme_text_color;
+    font-size: 12px;
+}
+
+.ytrawl-playlist {
+    background-color: rgba(76, 70, 63, 0.9);
+    border-radius: 10px;
+    padding: 8px 12px;
+    color: #e9e1d8;
+}
+
+.ytrawl-playlist .ytrawl-caption {
+    color: #e9e1d8;
+}
+
+.ytrawl-history-item {
+    color: rgba(230, 230, 230, 0.8);
+    padding: 5px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+}
+
+.ytrawl-history-item:hover {
+    color: @theme_text_color;
+    background-color: rgba(127, 127, 127, 0.14);
+}

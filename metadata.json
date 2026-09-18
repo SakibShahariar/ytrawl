@@ -1,0 +1,10 @@
+{
+  "uuid": "ytrawl@sakib.dev",
+  "name": "Ytrawl",
+  "description": "Downloads media on demand via yt-dlp, right from your GNOME top bar.",
+  "shell-version": ["45", "46", "47", "48", "49", "50"],
+  "settings-schema": "org.gnome.shell.extensions.ytrawl",
+  "url": "https://github.com/SakibShahariar/ytrawl",
+  "version-name": "1.0.0",
+  "gettext-domain": "ytrawl"
+}
