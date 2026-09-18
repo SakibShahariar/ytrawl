@@ -18,21 +18,7 @@
 }
 
 .ytrawl-scroll StScrollBar {
-    padding: 0 2px;
-}
-
-.ytrawl-scroll StScrollBar StBin#trough {
-    background-color: transparent;
-}
-
-.ytrawl-scroll StScrollBar StButton#vhandle {
-    background-color: rgba(180, 180, 180, 0.35);
-    border-radius: 4px;
-    min-width: 6px;
-}
-
-.ytrawl-scroll StScrollBar StButton#vhandle:hover {
-    background-color: rgba(180, 180, 180, 0.55);
+    width: 0;
 }
 
 .ytrawl-content {
