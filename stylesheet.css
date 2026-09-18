@@ -291,6 +291,13 @@
     font-size: 13px;
 }
 
+/* Floor width so short values ("Off", "Nothing") don't get squeezed and
+   ellipsized by the row's flex layout — see the comment in ui.js. */
+.ytrawl-accordion-value {
+    min-width: 64px;
+    text-align: right;
+}
+
 /* ---- toggles ---------------------------------------------------------- */
 
 .ytrawl-toggle-row {
