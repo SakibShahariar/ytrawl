@@ -111,6 +111,12 @@ export default class YtrawlPreferences extends ExtensionPreferences {
             settings,
             key: 'use-archive',
         }));
+        general.add(switchRow({
+            title: 'Reduce motion',
+            subtitle: 'Turns off the pulsing busy/extracting animation',
+            settings,
+            key: 'reduce-motion',
+        }));
         general.add(comboRow({
             title: 'After download',
             settings,
@@ -152,6 +158,12 @@ export default class YtrawlPreferences extends ExtensionPreferences {
             title: 'Embed subtitles into video',
             settings,
             key: 'embed-subs',
+        }));
+        media.add(switchRow({
+            title: 'Save subtitle file',
+            subtitle: 'Writes a separate .srt/.vtt, independent of embedding',
+            settings,
+            key: 'write-subs-file',
         }));
         media.add(switchRow({
             title: 'Include auto-generated captions',

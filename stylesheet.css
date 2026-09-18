@@ -18,8 +18,21 @@
 }
 
 .ytrawl-scroll StScrollBar {
-    min-width: 0;
-    width: 0;
+    padding: 0 2px;
+}
+
+.ytrawl-scroll StScrollBar StBin#trough {
+    background-color: transparent;
+}
+
+.ytrawl-scroll StScrollBar StButton#vhandle {
+    background-color: rgba(180, 180, 180, 0.35);
+    border-radius: 4px;
+    min-width: 6px;
+}
+
+.ytrawl-scroll StScrollBar StButton#vhandle:hover {
+    background-color: rgba(180, 180, 180, 0.55);
 }
 
 .ytrawl-content {
@@ -66,12 +79,21 @@
     border-radius: 8px;
     padding: 5px;
     color: rgba(230, 230, 230, 0.8);
+    border: 1px solid transparent;
 }
 
-.ytrawl-icon-btn:hover,
+.ytrawl-icon-btn:hover {
+    background-color: rgba(127, 127, 127, 0.14);
+    color: #ffffff;
+}
+
+/* Keyboard focus gets its own border cue distinct from mouse hover, so a
+   keyboard-only user gets a stronger/different signal than "the pointer
+   happens to be near this". */
 .ytrawl-icon-btn:focus {
     background-color: rgba(127, 127, 127, 0.14);
     color: #ffffff;
+    border-color: @theme_selected_bg_color;
 }
 
 .ytrawl-icon-btn:active {
@@ -196,11 +218,16 @@
     padding: 5px 12px;
     font-size: 12px;
     transition-duration: 100ms;
+    border: 1px solid transparent;
 }
 
-.ytrawl-pill:hover,
+.ytrawl-pill:hover {
+    background-color: rgba(127, 127, 127, 0.24);
+}
+
 .ytrawl-pill:focus {
     background-color: rgba(127, 127, 127, 0.24);
+    border-color: @theme_selected_bg_color;
 }
 
 .ytrawl-pill:checked {
@@ -216,12 +243,18 @@
     padding: 8px 16px;
     font-weight: 600;
     transition-duration: 120ms;
+    border: 1px solid transparent;
 }
 
-.ytrawl-primary:hover,
+.ytrawl-primary:hover {
+    background-color: #7f9bd4;
+    color: #ffffff;
+}
+
 .ytrawl-primary:focus {
     background-color: #7f9bd4;
     color: #ffffff;
+    border-color: #ffffff;
 }
 
 .ytrawl-primary:insensitive,
@@ -234,12 +267,18 @@
     color: @theme_text_color;
     border-radius: 10px;
     padding: 8px 16px;
+    border: 1px solid transparent;
 }
 
-.ytrawl-ghost:hover,
+.ytrawl-ghost:hover {
+    background-color: rgba(127, 127, 127, 0.30);
+    color: #ffffff;
+}
+
 .ytrawl-ghost:focus {
     background-color: rgba(127, 127, 127, 0.30);
     color: #ffffff;
+    border-color: @theme_selected_bg_color;
 }
 
 /* ---- accordion ------------------------------------------------------- */
@@ -248,11 +287,16 @@
     border-radius: 10px;
     padding: 8px 10px;
     margin-top: 2px;
+    border: 1px solid transparent;
 }
 
-.ytrawl-accordion-header:hover,
+.ytrawl-accordion-header:hover {
+    background-color: rgba(127, 127, 127, 0.10);
+}
+
 .ytrawl-accordion-header:focus {
     background-color: rgba(127, 127, 127, 0.10);
+    border-color: @theme_selected_bg_color;
 }
 
 .ytrawl-accordion-title {
@@ -306,9 +350,13 @@
     min-height: 32px;
 }
 
-.ytrawl-dropdown:hover,
+.ytrawl-dropdown:hover {
+    background-color: rgba(127, 127, 127, 0.18);
+}
+
 .ytrawl-dropdown:focus {
     background-color: rgba(127, 127, 127, 0.18);
+    border-color: @theme_selected_bg_color;
 }
 
 .ytrawl-dropdown-label {
@@ -332,6 +380,7 @@
 }
 
 .ytrawl-dropdown-item:hover,
+.ytrawl-dropdown-item:focus,
 .ytrawl-dropdown-item:checked {
     background-color: @theme_selected_bg_color;
     color: @theme_selected_fg_color;
@@ -369,6 +418,16 @@
 
 /* ---- queue / playlist / history ---------------------------------------- */
 
+.ytrawl-queue {
+    background-color: rgba(127, 127, 127, 0.08);
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(127, 127, 127, 0.15);
+    border-radius: 10px;
+    padding: 8px;
+    spacing: 6px;
+}
+
 .ytrawl-queue-item {
     background-color: rgba(127, 127, 127, 0.08);
     border-width: 1px;
@@ -396,13 +455,20 @@
 }
 
 .ytrawl-history-item {
-    color: rgba(230, 230, 230, 0.8);
-    padding: 5px 8px;
     border-radius: 6px;
-    font-size: 11px;
+    spacing: 4px;
 }
 
 .ytrawl-history-item:hover {
-    color: @theme_text_color;
     background-color: rgba(127, 127, 127, 0.14);
+}
+
+.ytrawl-history-link {
+    color: rgba(230, 230, 230, 0.8);
+    padding: 5px 8px;
+    font-size: 11px;
+}
+
+.ytrawl-history-link:hover {
+    color: @theme_text_color;
 }

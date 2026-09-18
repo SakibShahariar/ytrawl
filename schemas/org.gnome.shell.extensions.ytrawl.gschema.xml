@@ -14,8 +14,21 @@
     </key>
 
     <key name="auto-extract-clipboard" type="b">
-      <default>true</default>
+      <default>false</default>
       <summary>Extract a pasted URL automatically</summary>
+      <description>Off by default: opening the panel with auto-clipboard on will fill the field but won't extract/hit the network until you press Enter or the extract button.</description>
+    </key>
+
+    <key name="write-subs-file" type="b">
+      <default>false</default>
+      <summary>Save subtitles as a separate file</summary>
+      <description>Writes manually-authored subtitles to a sidecar file (independent of embedding).</description>
+    </key>
+
+    <key name="reduce-motion" type="b">
+      <default>false</default>
+      <summary>Reduce motion</summary>
+      <description>Disables the pulsing busy/extracting animation in favor of a static dim state.</description>
     </key>
 
     <key name="clear-input-after-download" type="b">

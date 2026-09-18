@@ -72,28 +72,22 @@ export default class YtrawlExtension extends Extension {
         };
 
         this._menuOpen = false;
+        this._stageKeyId = null;
+        // Only listen at the stage level while the menu is actually open —
+        // this was previously a permanently-installed global key hook, which
+        // is more than the feature (routing Enter/Escape into a
+        // reactive:false menu item) needs and is the kind of thing GNOME
+        // Shell extension review tends to flag.
         connectSafe(this._indicator.menu, 'open-state-changed', (menu, open) => {
             this._menuOpen = open;
             if (open) {
                 this._applyMatugenTheme();
                 this._onPanelOpened();
+                this._connectStageKey();
+            } else {
+                this._disconnectStageKey();
             }
         });
-
-        this._stageKeyId = null;
-        try {
-            this._stageKeyId = global.stage.connect('key-press-event', (actor, event) => {
-                if (!this._panel) return;
-                let isOpen = false;
-                try { isOpen = !!this._indicator.menu.isOpen; } catch (e) {}
-                if (!isOpen) {
-                    try { isOpen = !!this._indicator.menu.actor.visible; } catch (e) {}
-                }
-                if (!isOpen) return;
-                this._panel.ensureEntryFocus();
-                this._panel.handleStageKey(event);
-            });
-        } catch (e) { /* stage key-press not available */ }
 
         Main.panel.addToStatusArea(this.metadata.uuid, this._indicator, 0, 'right');
     }
@@ -101,10 +95,7 @@ export default class YtrawlExtension extends Extension {
     disable() {
         this._menuOpen = false;
         this._removeMatugenTheme();
-        if (this._stageKeyId !== null) {
-            try { global.stage.disconnect(this._stageKeyId); } catch (e) { /* ignore */ }
-            this._stageKeyId = null;
-        }
+        this._disconnectStageKey();
         this._icon.remove_all_transitions();
         if (this._panel) {
             this._panel.destroy();
@@ -120,6 +111,24 @@ export default class YtrawlExtension extends Extension {
         }
         this._panel = null;
         this._settings = null;
+    }
+
+    _connectStageKey() {
+        if (this._stageKeyId !== null) return;
+        try {
+            this._stageKeyId = global.stage.connect('key-press-event', (actor, event) => {
+                if (!this._panel) return;
+                this._panel.ensureEntryFocus();
+                this._panel.handleStageKey(event);
+            });
+        } catch (e) { /* stage key-press not available */ }
+    }
+
+    _disconnectStageKey() {
+        if (this._stageKeyId !== null) {
+            try { global.stage.disconnect(this._stageKeyId); } catch (e) { /* ignore */ }
+            this._stageKeyId = null;
+        }
     }
 
     _onPanelOpened() {
@@ -154,9 +163,10 @@ export default class YtrawlExtension extends Extension {
             'output-template', 'cookies', 'cookies-from-browser',
             'cookies-profile', 'proxy', 'rate-limit', 'concurrent-fragments',
             'custom-format-selector', 'custom-args', 'download-thumbnail',
-            'embed-thumbnail', 'embed-subs', 'include-auto-subs', 'prefer-drc',
-            'sponsor-block', 'sponsor-block-categories', 'use-archive',
+            'embed-thumbnail', 'embed-subs', 'include-auto-subs', 'write-subs-file',
+            'prefer-drc', 'sponsor-block', 'sponsor-block-categories', 'use-archive',
             'save-history', 'history', 'sub-language', 'post-download-action',
+            'reduce-motion',
         ];
         for (const key of keys) {
             try { this._settings.reset(key); } catch (e) { /* skip */ }
@@ -192,6 +202,15 @@ export default class YtrawlExtension extends Extension {
 
     _pulseIcon(run) {
         if (!this._icon) return;
+        if (run && this._settings && this._settings.get_boolean('reduce-motion')) {
+            this._icon.remove_all_transitions();
+            if (this._pulseTimer) {
+                try { GLib.source_remove(this._pulseTimer); } catch (e) { /* ignore */ }
+                this._pulseTimer = null;
+            }
+            this._icon.opacity = 140;
+            return;
+        }
         if (run) {
             if (this._pulseTimer) return;
             try {
