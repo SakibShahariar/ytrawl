@@ -182,6 +182,18 @@ export default class YtrawlPreferences extends ExtensionPreferences {
                 { value: 'm4a', label: 'M4A' },
             ],
         }));
+        general.add(comboRow({
+            title: 'Playlist download limit',
+            settings,
+            key: 'playlist-limit',
+            options: [
+                { value: 'all', label: 'All items' },
+                { value: '1', label: 'First item only' },
+                { value: '5', label: 'First 5 items' },
+                { value: '10', label: 'First 10 items' },
+                { value: '20', label: 'First 20 items' },
+            ],
+        }));
         page.add(general.group);
 
         // History and privacy.
