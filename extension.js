@@ -28,6 +28,7 @@ export default class YtrawlExtension extends Extension {
             settings: this._settings,
             deps: {
                 getClipboardText: (cb) => this._getClipboard(cb),
+                copyToClipboard: (text) => this._copyToClipboard(text),
                 notify: (title, body, icon) => this._notify(title, body, icon),
                 openFolder: (path) => openPath(path),
                 resetSettings: () => this._resetSettings(),
@@ -146,6 +147,14 @@ export default class YtrawlExtension extends Extension {
             });
         } catch (e) {
             cb('');
+        }
+    }
+
+    _copyToClipboard(text) {
+        try {
+            St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, String(text));
+        } catch (e) {
+            this._notify('Unable to copy path', 'The clipboard could not be accessed.', 'dialog-warning-symbolic');
         }
     }
 
