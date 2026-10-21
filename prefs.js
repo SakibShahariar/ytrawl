@@ -218,7 +218,7 @@ export default class YtrawlPreferences extends ExtensionPreferences {
         page.add(sb.group);
 
         // Network & cookies
-        const net = groupRow({ title: 'Network &amp; cookies' });
+        const net = groupRow({ title: 'Network & cookies' });
         net.add(entryRow({
             title: 'Proxy URL',
             settings,
