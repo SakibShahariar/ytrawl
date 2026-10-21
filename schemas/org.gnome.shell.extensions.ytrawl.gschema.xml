@@ -142,6 +142,12 @@
       <description>When enabled, the queue waits for you to resume it after a download fails.</description>
     </key>
 
+    <key name="playlist-limit" type="s">
+      <default>'all'</default>
+      <summary>Maximum playlist items to download</summary>
+      <description>Use all items, or limit playlist downloads to the first 1, 5, 10, or 20 items.</description>
+    </key>
+
     <key name="history" type="as">
       <default>[]</default>
       <summary>Download history</summary>
