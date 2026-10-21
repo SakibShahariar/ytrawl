@@ -17,6 +17,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install --yes libglib2.0-bin zip
 
+      - name: Run model unit tests
+        run: node --experimental-default-type=module --test tests/*.test.js
+
       - name: Compile GSettings schema
         run: glib-compile-schemas --strict schemas
 
