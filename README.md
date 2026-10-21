@@ -82,6 +82,13 @@ either set persistent defaults in preferences or adjust them from the panel.
   action if you need to reset it.
 - GSettings schemas are compiled locally during installation. The generated
   `schemas/gschemas.compiled` file is intentionally not tracked in Git.
+- Download history is stored in GNOME settings. You can disable **Remember
+  download history** or clear saved URLs in the **History & Privacy** section
+  of preferences. With remembering disabled, newly downloaded URLs are not
+  persisted.
+- Thumbnail previews use a private directory under the user's cache
+  directory. Ytrawl removes leftover preview files when the extension starts
+  and removes the current preview when it is replaced or the extension stops.
 
 ## License
 
