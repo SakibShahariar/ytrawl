@@ -143,6 +143,12 @@ export default class YtrawlPreferences extends ExtensionPreferences {
             key: 'clear-input-after-download',
         }));
         general.add(switchRow({
+            title: 'Stop queue after a failed download',
+            subtitle: 'Keep remaining queued items until you choose Run queue again.',
+            settings,
+            key: 'stop-on-queue-error',
+        }));
+        general.add(switchRow({
             title: 'Skip already-downloaded media',
             subtitle: 'yt-dlp download archive',
             settings,
