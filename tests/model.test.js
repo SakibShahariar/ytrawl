@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { splitCustomArgs } from '../lib/model.js';
+import { buildDownloadArgs, splitCustomArgs } from '../lib/model.js';
 
 test('splits ordinary whitespace-separated arguments', () => {
     assert.deepEqual(splitCustomArgs('--no-warnings --limit-rate 5M'), [
@@ -28,4 +28,54 @@ test('preserves an explicitly empty quoted argument', () => {
 
 test('rejects an unclosed quote', () => {
     assert.throws(() => splitCustomArgs('--cookies "unfinished path'), /Unclosed quote/);
+});
+
+test('limits playlist downloads to the configured first items', () => {
+    const job = {
+        url: 'https://example.com/playlist',
+        mode: 'video',
+        quality: 'best',
+        info: { isPlaylist: true },
+    };
+    const settings = {
+        downloadDir: '/tmp/ytrawl-test',
+        outputTemplate: '%(title)s.%(ext)s',
+        playlistLimit: '5',
+    };
+    const args = buildDownloadArgs(job, settings, false, '/home/test');
+    const index = args.indexOf('--playlist-items');
+    assert.notEqual(index, -1);
+    assert.equal(args[index + 1], '1-5');
+});
+
+test('does not limit playlist downloads when set to all', () => {
+    const job = {
+        url: 'https://example.com/playlist',
+        mode: 'video',
+        quality: 'best',
+        info: { isPlaylist: true },
+    };
+    const settings = {
+        downloadDir: '/tmp/ytrawl-test',
+        outputTemplate: '%(title)s.%(ext)s',
+        playlistLimit: 'all',
+    };
+    const args = buildDownloadArgs(job, settings, false, '/home/test');
+    assert.equal(args.includes('--playlist-items'), false);
+});
+
+test('does not add playlist item limits to a single video', () => {
+    const job = {
+        url: 'https://example.com/video',
+        mode: 'video',
+        quality: 'best',
+        info: { isPlaylist: false },
+    };
+    const settings = {
+        downloadDir: '/tmp/ytrawl-test',
+        outputTemplate: '%(title)s.%(ext)s',
+        playlistLimit: '1',
+    };
+    const args = buildDownloadArgs(job, settings, false, '/home/test');
+    assert.equal(args.includes('--playlist-items'), false);
 });
