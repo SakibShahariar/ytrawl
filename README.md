@@ -25,11 +25,19 @@ saying so the next time you open it.
 ```bash
 git clone https://github.com/SakibShahariar/ytrawl.git
 cd ytrawl
-install_dir="$HOME/.local/share/gnome-shell/extensions/ytrawl@sakib.dev"
-mkdir -p "$install_dir"
-cp -r extension.js prefs.js metadata.json stylesheet.css lib schemas LICENSE "$install_dir/"
-glib-compile-schemas "$install_dir/schemas"
+bash scripts/install.sh
 ```
+
+The installer copies the extension files to your local GNOME Shell extensions
+directory and compiles the GSettings schema. It does not enable the extension
+automatically. To package a distributable ZIP instead, run:
+
+```bash
+bash scripts/package.sh
+```
+
+The archive is written to `dist/ytrawl.zip`. Both scripts require the usual
+GNOME/GSettings tools; packaging additionally requires `zip`.
 
 Then log out and back in. On X11, you can also restart GNOME Shell with
 `Alt+F2` → `r` → `Enter`; on Wayland, use a fresh login session. Enable
