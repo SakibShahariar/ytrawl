@@ -80,6 +80,8 @@ either set persistent defaults in preferences or adjust them from the panel.
 - **Skip already-downloaded media** keeps a hidden `.ytrawl-archive.txt`
   in your download folder; use the adjacent **Clear download archive**
   action if you need to reset it.
+- **Stop queue after a failed download** (in preferences) leaves remaining
+  items queued when a download fails. Use **Run queue** to continue manually.
 - GSettings schemas are compiled locally during installation. The generated
   `schemas/gschemas.compiled` file is intentionally not tracked in Git.
 - Download history is stored in GNOME settings. You can disable **Remember
