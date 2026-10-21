@@ -32,6 +32,7 @@ export default class YtrawlExtension extends Extension {
                 copyToClipboard: (text) => this._copyToClipboard(text),
                 notify: (title, body, icon) => this._notify(title, body, icon),
                 openFolder: (path) => openPath(path),
+                openUrl: (url) => openPath(url),
                 resetSettings: () => this._resetSettings(),
             },
         });
