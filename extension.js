@@ -23,6 +23,7 @@ const MATUGEN_CSS_PATH = ['ytrawl-matugen.css'];
 export default class YtrawlExtension extends Extension {
     enable() {
         this._settings = this.getSettings();
+        this._historyChangedId = null;
 
         this._controller = new YtrawlController({
             settings: this._settings,
@@ -71,6 +72,11 @@ export default class YtrawlExtension extends Extension {
             this._panel.render();
             this._syncButton();
         };
+        this._historyChangedId = this._settings.connect('changed::history', () => {
+            if (!this._controller) return;
+            this._controller.history = [...this._settings.get_strv('history')];
+            this._controller._refreshUI();
+        });
 
         this._menuOpen = false;
         this._stageKeyId = null;
@@ -95,6 +101,10 @@ export default class YtrawlExtension extends Extension {
 
     disable() {
         this._menuOpen = false;
+        if (this._settings && this._historyChangedId !== null) {
+            this._settings.disconnect(this._historyChangedId);
+            this._historyChangedId = null;
+        }
         this._removeMatugenTheme();
         this._disconnectStageKey();
         this._icon.remove_all_transitions();
