@@ -57,7 +57,7 @@ gnome-extensions prefs ytrawl@sakib.dev
 
 - **General** — clipboard auto-fill/auto-extract, download archive (skip
   already-downloaded media), reduced motion, default post-download action,
-  and audio format.
+  audio format, and playlist download limit.
 - **Media** — thumbnails (save/embed), subtitles (embed/save separately/
   include auto-captions), and DRC audio preference.
 - **SponsorBlock** — category selection for segment removal.
@@ -82,6 +82,8 @@ either set persistent defaults in preferences or adjust them from the panel.
   action if you need to reset it.
 - **Stop queue after a failed download** (in preferences) leaves remaining
   items queued when a download fails. Use **Run queue** to continue manually.
+- **Playlist download limit** applies to playlist URLs only. Choose all items,
+  the first item, or the first 5, 10, or 20 items in preferences.
 - GSettings schemas are compiled locally during installation. The generated
   `schemas/gschemas.compiled` file is intentionally not tracked in Git.
 - Download history is stored in GNOME settings. You can disable **Remember
