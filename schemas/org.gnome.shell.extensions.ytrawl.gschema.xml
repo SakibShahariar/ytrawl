@@ -136,6 +136,12 @@
       <summary>Remember downloaded URLs</summary>
     </key>
 
+    <key name="stop-on-queue-error" type="b">
+      <default>false</default>
+      <summary>Stop queued downloads after a failure</summary>
+      <description>When enabled, the queue waits for you to resume it after a download fails.</description>
+    </key>
+
     <key name="history" type="as">
       <default>[]</default>
       <summary>Download history</summary>
