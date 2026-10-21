@@ -20,6 +20,12 @@ jobs:
       - name: Check shell script syntax
         run: bash -n scripts/*.sh
 
+      - name: Check JavaScript syntax
+        run: |
+          for file in extension.js prefs.js lib/*.js; do
+            node --experimental-default-type=module --check "$file"
+          done
+
       - name: Run model unit tests
         run: node --experimental-default-type=module --test tests/*.test.js
 
