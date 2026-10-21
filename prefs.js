@@ -74,6 +74,43 @@ function groupRow({ title }) {
     return { group, add: (w) => group.add(w) };
 }
 
+function historyPrivacyRows(settings) {
+    const toggle = new Gtk.Switch({
+        active: settings.get_boolean('save-history'),
+        valign: Gtk.Align.CENTER,
+    });
+    const sync = () => {
+        const value = settings.get_boolean('save-history');
+        if (toggle.get_active() !== value) toggle.set_active(value);
+    };
+    toggle.connect('notify::active', () => {
+        const enabled = toggle.get_active();
+        settings.set_boolean('save-history', enabled);
+        if (!enabled) settings.set_strv('history', []);
+    });
+    settings.connect('changed::save-history', sync);
+
+    const remember = new Adw.ActionRow({
+        title: 'Remember download history',
+        subtitle: 'Stores previously downloaded URLs in GNOME settings. Turning this off clears saved history.',
+        activatable_widget: toggle,
+    });
+    remember.add_suffix(toggle);
+
+    const clear = new Gtk.Button({
+        label: 'Clear history',
+        valign: Gtk.Align.CENTER,
+    });
+    clear.connect('clicked', () => settings.set_strv('history', []));
+    const clearRow = new Adw.ActionRow({
+        title: 'Clear saved history',
+        subtitle: 'Remove all URLs currently stored in history.',
+        activatable_widget: clear,
+    });
+    clearRow.add_suffix(clear);
+    return [remember, clearRow];
+}
+
 export default class YtrawlPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
         const settings = this.getSettings();
@@ -140,6 +177,11 @@ export default class YtrawlPreferences extends ExtensionPreferences {
             ],
         }));
         page.add(general.group);
+
+        // History and privacy.
+        const privacy = groupRow({ title: 'History & Privacy' });
+        for (const row of historyPrivacyRows(settings)) privacy.add(row);
+        page.add(privacy.group);
 
         // Media
         const media = groupRow({ title: 'Media' });
