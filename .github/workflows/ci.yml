@@ -17,6 +17,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install --yes libglib2.0-bin zip
 
+      - name: Check shell script syntax
+        run: bash -n scripts/*.sh
+
       - name: Run model unit tests
         run: node --experimental-default-type=module --test tests/*.test.js
 
@@ -24,12 +27,11 @@ jobs:
         run: glib-compile-schemas --strict schemas
 
       - name: Build extension archive
-        run: |
-          zip -r ytrawl.zip extension.js prefs.js metadata.json stylesheet.css lib schemas LICENSE
+        run: bash scripts/package.sh dist
 
       - name: Upload extension archive
         uses: actions/upload-artifact@v4
         with:
           name: ytrawl-extension
-          path: ytrawl.zip
+          path: dist/ytrawl.zip
           if-no-files-found: error
