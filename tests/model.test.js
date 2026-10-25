@@ -133,7 +133,7 @@ test('does not guess an output path for a custom yt-dlp template', () => {
     const job = { mode: 'video' };
     const info = { title: 'Example video' };
     assert.equal(guessOutputPath({ downloadDir: '/home/test/Downloads', outputTemplate: '%(uploader)s/%(title)s.%(ext)s' }, job, info, '/home/test'), '');
-    assert.equal(guessOutputPath({ downloadDir: '/home/test/Downloads', outputTemplate: '%(title)s.%(ext)s' }, job, info, '/home/test'), '/home/test/Downloads/Example video.%(ext)s');
+    assert.equal(guessOutputPath({ downloadDir: '/home/test/Downloads', outputTemplate: '%(title)s.%(ext)s' }, job, info, '/home/test'), '');
 });
 
 
