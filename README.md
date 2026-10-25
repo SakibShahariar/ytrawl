@@ -81,6 +81,7 @@ does not evaluate them through a shell.
 - For development diagnostics, launch GNOME Shell with `YTRAWL_DEBUG=1` in its
   environment to warn when `stWidget()` drops unsupported properties. Normal
   operation remains silent; restart the shell session after changing the environment.
+- **Cookies from browser** reads authentication cookies from the selected browser/profile; choose the matching profile when the browser has multiple profiles. Treat cookie access as sensitive. **Proxy URL** applies to yt-dlp network requests, so it can route video, metadata, and thumbnail traffic through that proxy; credentials in the URL should be kept private.
 - The panel's raw log redacts obvious cookie paths, proxy values, credentialed URLs,
   and named token/password arguments. This is heuristic display-only filtering, not
   a complete secret detector; treat copied logs as potentially sensitive.
