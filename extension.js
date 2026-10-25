@@ -108,6 +108,7 @@ export default class YtrawlExtension extends Extension {
         }
         this._removeMatugenTheme();
         this._disconnectStageKey();
+        this._pulseIcon(false);
         this._icon.remove_all_transitions();
         if (this._panel) {
             this._panel.destroy();
