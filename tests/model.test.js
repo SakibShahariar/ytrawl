@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { buildDownloadArgs, cleanClipboardUrl, cleanUrlText, formatSize, guessOutputPath, isPathWithinDirectory, splitCustomArgs } from '../lib/model.js';
+import { buildDownloadArgs, cleanClipboardUrl, cleanUrlText, formatSize, guessOutputPath, isPartialArtifactName, isPathWithinDirectory, splitCustomArgs } from '../lib/model.js';
 
 test('splits ordinary whitespace-separated arguments', () => {
     assert.deepEqual(splitCustomArgs('--no-warnings --limit-rate 5M'), [
@@ -134,4 +134,14 @@ test('does not guess an output path for a custom yt-dlp template', () => {
     const info = { title: 'Example video' };
     assert.equal(guessOutputPath({ downloadDir: '/home/test/Downloads', outputTemplate: '%(uploader)s/%(title)s.%(ext)s' }, job, info, '/home/test'), '');
     assert.equal(guessOutputPath({ downloadDir: '/home/test/Downloads', outputTemplate: '%(title)s.%(ext)s' }, job, info, '/home/test'), '/home/test/Downloads/Example video.%(ext)s');
+});
+
+
+test('matches partial artifacts only at the title boundary', () => {
+    assert.equal(isPartialArtifactName('video.mp4.part', 'video'), true);
+    assert.equal(isPartialArtifactName('video.f137.mp4.part', 'video'), true);
+    assert.equal(isPartialArtifactName('video.part-Frag12', 'video'), true);
+    assert.equal(isPartialArtifactName('videography.mp4.part', 'video'), false);
+    assert.equal(isPartialArtifactName('video-editor.mp4.part', 'video'), false);
+    assert.equal(isPartialArtifactName('video.mp4', 'video'), false);
 });
