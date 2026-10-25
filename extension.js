@@ -22,6 +22,7 @@ const MATUGEN_CSS_PATH = ['ytrawl-matugen.css'];
 
 export default class YtrawlExtension extends Extension {
     enable() {
+        this._clipboardReadCancels = new Set();
         this._settings = this.getSettings();
         this._historyChangedId = null;
 
@@ -102,6 +103,11 @@ export default class YtrawlExtension extends Extension {
 
     disable() {
         this._menuOpen = false;
+        if (this._clipboardReadCancels) {
+            for (const cancel of [...this._clipboardReadCancels]) cancel();
+            this._clipboardReadCancels.clear();
+            this._clipboardReadCancels = null;
+        }
         if (this._settings && this._historyChangedId !== null) {
             this._settings.disconnect(this._historyChangedId);
             this._historyChangedId = null;
@@ -153,12 +159,31 @@ export default class YtrawlExtension extends Extension {
     }
 
     _getClipboard(cb) {
+        let completed = false;
+        let timeoutId = 0;
+        const finish = (text) => {
+            if (completed) return;
+            completed = true;
+            if (timeoutId) {
+                GLib.source_remove(timeoutId);
+                timeoutId = 0;
+            }
+            if (this._clipboardReadCancels) this._clipboardReadCancels.delete(cancel);
+            cb(text);
+        };
+        const cancel = () => finish(null);
+        if (this._clipboardReadCancels) this._clipboardReadCancels.add(cancel);
+        timeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1500, () => {
+            timeoutId = 0;
+            finish(null);
+            return GLib.SOURCE_REMOVE;
+        });
         try {
             St.Clipboard.get_default().get_text(St.ClipboardType.CLIPBOARD, (_clip, text) => {
-                cb(text || '');
+                finish(text || '');
             });
         } catch (e) {
-            cb('');
+            finish('');
         }
     }
 
