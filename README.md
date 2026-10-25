@@ -84,6 +84,9 @@ does not evaluate them through a shell.
 - **Skip already-downloaded media** keeps a hidden `.ytrawl-archive.txt`
   in your download folder; use the adjacent **Clear download archive**
   action if you need to reset it.
+- **Open file** only opens paths lexically inside the configured download
+  directory. This check does not resolve symlinks, so a symlink-based escape is
+  not prevented.
 - **Stop queue after a failed download** (in preferences) leaves remaining
   items queued when a download fails. Use **Run queue** to continue manually.
 - **Playlist download limit** applies to playlist URLs only. Choose all items,
