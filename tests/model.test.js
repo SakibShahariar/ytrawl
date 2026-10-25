@@ -93,3 +93,20 @@ test('strips the closing angle bracket from autolinked URLs', () => {
     assert.equal(cleanUrlText('<https://example.com/video>'), 'https://example.com/video');
     assert.equal(cleanUrlText('https://example.com/video'), 'https://example.com/video');
 });
+
+
+test('falls back to all playlist items for unknown stored limits', () => {
+    const job = {
+        url: 'https://example.com/playlist',
+        mode: 'video',
+        quality: 'best',
+        info: { isPlaylist: true },
+    };
+    const settings = {
+        downloadDir: '/tmp/ytrawl-test',
+        outputTemplate: '%(title)s.%(ext)s',
+        playlistLimit: 'unexpected-legacy-value',
+    };
+    const args = buildDownloadArgs(job, settings, false, '/home/test');
+    assert.equal(args.includes('--playlist-items'), false);
+});
