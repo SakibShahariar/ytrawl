@@ -301,12 +301,31 @@ export default class YtrawlPreferences extends ExtensionPreferences {
             key: 'proxy',
             placeholder: 'http://user:pass@host:port',
         }));
-        net.add(entryRow({ title: 'Rate limit', settings, key: 'rate-limit', placeholder: '5M' }));
+        net.add(entryRow({
+            title: 'Rate limit',
+            subtitle: 'Optional positive rate, e.g. 5M or 500K',
+            settings,
+            key: 'rate-limit',
+            placeholder: '5M',
+            validate: (value) => {
+                const rate = value.trim();
+                return rate && (!/^\\d+(?:\\.\\d+)?(?:[KMGTPEZY](?:i?B)?)?$/i.test(rate) || Number.parseFloat(rate) <= 0)
+                    ? 'Use a positive rate such as 5M or 500K, or leave empty.'
+                    : '';
+            },
+        }));
         net.add(entryRow({
             title: 'Concurrent fragments',
+            subtitle: 'Optional positive integer; empty uses yt-dlp default',
             settings,
             key: 'concurrent-fragments',
             placeholder: '4',
+            validate: (value) => {
+                const count = value.trim();
+                return count && (!/^\\d+$/.test(count) || Number(count) < 1)
+                    ? 'Use a positive whole number, or leave empty.'
+                    : '';
+            },
         }));
         net.add(comboRow({
             title: 'Cookies from browser',
