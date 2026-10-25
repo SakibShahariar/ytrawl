@@ -72,6 +72,10 @@ gnome-extensions prefs ytrawl@sakib.dev
 The network and output options are available in both places so you can
 either set persistent defaults in preferences or adjust them from the panel.
 
+Extra yt-dlp arguments run with your user permissions, so only enter arguments
+from sources you trust. Ytrawl passes them as separate process arguments; it
+does not evaluate them through a shell.
+
 ## Notes
 
 - **Reset settings to defaults** (in the panel's Advanced section) is
