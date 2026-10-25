@@ -173,3 +173,25 @@ test('places the intended URL before custom yt-dlp arguments', () => {
     assert.ok(args.indexOf(job.url) < args.indexOf('--limit-rate'));
     assert.equal(args[args.indexOf('--limit-rate') + 1], '5M');
 });
+
+
+test('builds DRC video selectors with explicit quality fallbacks', () => {
+    const job = { url: 'https://example.com/video', mode: 'video', quality: '720', info: {} };
+    const settings = { downloadDir: '/tmp/ytrawl-test', outputTemplate: '%(title)s.%(ext)s', preferDrc: true };
+    const args = buildDownloadArgs(job, settings, false, '/home/test');
+    assert.equal(args[args.indexOf('-f') + 1], "(bestvideo[height<=720]+bestaudio[format_id$='-drc'])/(bestvideo[height<=720]+bestaudio)/best[height<=720]");
+});
+
+test('builds DRC audio selectors with language and normal-audio fallbacks', () => {
+    const job = { url: 'https://example.com/audio', mode: 'audio', audioFormat: 'best', audioLanguage: 'en', info: {} };
+    const settings = { downloadDir: '/tmp/ytrawl-test', outputTemplate: '%(title)s.%(ext)s', preferDrc: true };
+    const args = buildDownloadArgs(job, settings, false, '/home/test');
+    assert.equal(args[args.indexOf('-f') + 1], "bestaudio[language=en][format_id$='-drc']/bestaudio[language=en]/bestaudio");
+});
+
+test('uses the ordinary audio selector when DRC is disabled', () => {
+    const job = { url: 'https://example.com/audio', mode: 'audio', audioFormat: 'best', audioLanguage: 'en', info: {} };
+    const settings = { downloadDir: '/tmp/ytrawl-test', outputTemplate: '%(title)s.%(ext)s', preferDrc: false };
+    const args = buildDownloadArgs(job, settings, false, '/home/test');
+    assert.equal(args[args.indexOf('-f') + 1], 'bestaudio[language=en]/bestaudio');
+});
