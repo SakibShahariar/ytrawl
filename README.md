@@ -78,6 +78,8 @@ does not evaluate them through a shell.
 
 ## Notes
 
+- Download directories may be absolute paths or use `~/...`. Empty settings use
+  `~/Downloads`; `/`, `/proc`, `/sys`, and `/dev` are rejected as unsafe targets.
 - **Reset settings to defaults** (in the panel's Advanced section) is
   destructive — it wipes cookies, proxy, custom args, and history — and
   requires clicking it twice within a few seconds to confirm.
