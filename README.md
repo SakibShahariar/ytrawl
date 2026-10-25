@@ -78,6 +78,9 @@ does not evaluate them through a shell.
 
 ## Notes
 
+- The panel's raw log redacts obvious cookie paths, proxy values, credentialed URLs,
+  and named token/password arguments. This is heuristic display-only filtering, not
+  a complete secret detector; treat copied logs as potentially sensitive.
 - Download directories may be absolute paths or use `~/...`. Empty settings use
   `~/Downloads`; `/`, `/proc`, `/sys`, and `/dev` are rejected as unsafe targets.
 - **Reset settings to defaults** (in the panel's Advanced section) is
