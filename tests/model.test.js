@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { buildDownloadArgs, cleanClipboardUrl, cleanUrlText, formatSize, guessOutputPath, isPartialArtifactName, isPathWithinDirectory, redactSensitiveLogText, splitCustomArgs, validateDownloadDirectory } from '../lib/model.js';
+import { archivePath, buildDownloadArgs, cleanClipboardUrl, cleanUrlText, formatSize, guessOutputPath, isPartialArtifactName, isPathWithinDirectory, redactSensitiveLogText, splitCustomArgs, validateDownloadDirectory } from '../lib/model.js';
 
 test('splits ordinary whitespace-separated arguments', () => {
     assert.deepEqual(splitCustomArgs('--no-warnings --limit-rate 5M'), [
@@ -211,4 +211,19 @@ test('redacts obvious cookie paths, proxy credentials, and token arguments', () 
     assert.match(log, /--token=\[redacted\]/);
     assert.doesNotMatch(log, /cookies\.txt|alice:secret|abc123/);
     assert.match(redactSensitiveLogText('Proxy URL: http://alice:secret@proxy.example:8080'), /Proxy URL: \[redacted\]/i);
+});
+
+
+test('uses one shared archive path for yt-dlp arguments and archive clearing', () => {
+    assert.equal(archivePath('/home/test/Downloads'), '/home/test/Downloads/.ytrawl-archive.txt');
+    assert.equal(archivePath('/'), '/.ytrawl-archive.txt');
+    const args = buildDownloadArgs(
+        { url: 'https://example.com/video', mode: 'video', quality: 'best', info: { isPlaylist: false } },
+        { downloadDir: '/home/test/Downloads', outputTemplate: '%(title)s.%(ext)s', useArchive: true },
+        false,
+        '/home/test',
+    );
+    const archiveIndex = args.indexOf('--download-archive');
+    assert.notEqual(archiveIndex, -1);
+    assert.equal(args[archiveIndex + 1], archivePath('/home/test/Downloads'));
 });
