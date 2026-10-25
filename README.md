@@ -107,6 +107,7 @@ does not evaluate them through a shell.
   download history** or clear saved URLs in the **History & Privacy** section
   of Preferences. While history is disabled, new downloads are not added to memory
   or persisted, so turning it back on will not save URLs from the opt-out period.
+  Raw search queries (`ytsearch:` or plain search text) are never added to history.
 - Thumbnail previews use a private directory under the user's cache
   directory. Ytrawl removes leftover preview files when the extension starts
   and removes the current preview when it is replaced or the extension stops.
