@@ -204,17 +204,7 @@ export default class YtrawlExtension extends Extension {
     }
 
     _resetSettings() {
-        const keys = [
-            'download-dir', 'auto-clipboard', 'auto-extract-clipboard',
-            'clear-input-after-download', 'audio-format', 'advanced-visible',
-            'output-template', 'cookies', 'cookies-from-browser',
-            'cookies-profile', 'proxy', 'rate-limit', 'concurrent-fragments',
-            'custom-format-selector', 'custom-args', 'download-thumbnail',
-            'embed-thumbnail', 'embed-subs', 'include-auto-subs', 'write-subs-file',
-            'prefer-drc', 'sponsor-block', 'sponsor-block-categories', 'use-archive',
-            'save-history', 'history', 'sub-language', 'post-download-action',
-            'reduce-motion',
-        ];
+        const keys = this._settings.settings_schema.list_keys();
         for (const key of keys) {
             try { this._settings.reset(key); } catch (e) { /* skip */ }
         }
