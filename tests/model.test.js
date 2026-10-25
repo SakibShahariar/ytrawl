@@ -141,6 +141,8 @@ test('matches partial artifacts only at the title boundary', () => {
     assert.equal(isPartialArtifactName('video.mp4.part', 'video'), true);
     assert.equal(isPartialArtifactName('video.f137.mp4.part', 'video'), true);
     assert.equal(isPartialArtifactName('video.part-Frag12', 'video'), true);
+    assert.equal(isPartialArtifactName('video.f137.mp4.part-Frag2', 'video'), true);
+    assert.equal(isPartialArtifactName('video.f140.m4a.part-Frag12', 'video'), true);
     assert.equal(isPartialArtifactName('videography.mp4.part', 'video'), false);
     assert.equal(isPartialArtifactName('video-editor.mp4.part', 'video'), false);
     assert.equal(isPartialArtifactName('video.mp4', 'video'), false);
