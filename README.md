@@ -85,6 +85,7 @@ does not evaluate them through a shell.
 - The panel's raw log redacts obvious cookie paths, proxy values, credentialed URLs,
   and named token/password arguments. This is heuristic display-only filtering, not
   a complete secret detector; treat copied logs as potentially sensitive.
+- Metadata extraction is limited to 2 minutes and 8 MiB of JSON output. Large playlists or search results may exceed the limit; try opening a single video URL instead.
 - Download directories may be absolute paths or use `~/...`. Empty settings use
   `~/Downloads`; `/`, `/proc`, `/sys`, and `/dev` are rejected as unsafe targets.
 - **Reset settings to defaults** (in the panel's Advanced section) is
