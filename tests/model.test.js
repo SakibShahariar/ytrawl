@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { buildDownloadArgs, cleanUrlText, formatSize, splitCustomArgs } from '../lib/model.js';
+import { buildDownloadArgs, cleanUrlText, formatSize, isPathWithinDirectory, splitCustomArgs } from '../lib/model.js';
 
 test('splits ordinary whitespace-separated arguments', () => {
     assert.deepEqual(splitCustomArgs('--no-warnings --limit-rate 5M'), [
@@ -109,4 +109,12 @@ test('falls back to all playlist items for unknown stored limits', () => {
     };
     const args = buildDownloadArgs(job, settings, false, '/home/test');
     assert.equal(args.includes('--playlist-items'), false);
+});
+
+
+test('contains opened output paths under the configured download directory', () => {
+    assert.equal(isPathWithinDirectory('/home/user/Downloads/video.mp4', '/home/user/Downloads'), true);
+    assert.equal(isPathWithinDirectory('/home/user/Downloads/../secret.txt', '/home/user/Downloads'), false);
+    assert.equal(isPathWithinDirectory('/home/user/Downloads-archive/video.mp4', '/home/user/Downloads'), false);
+    assert.equal(isPathWithinDirectory('/home/user/Downloads', '/home/user/Downloads'), false);
 });
