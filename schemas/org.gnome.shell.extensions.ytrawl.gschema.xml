@@ -49,46 +49,55 @@
     <key name="output-template" type="s">
       <default>'%(title)s.%(ext)s'</default>
       <summary>yt-dlp output template</summary>
+      <description>Passed to yt-dlp as the output template. Example: %(title)s.%(ext)s. Custom templates may prevent Ytrawl from predicting the exact output file path.</description>
     </key>
 
     <key name="cookies" type="s">
       <default>''</default>
       <summary>Netscape-format cookies file path</summary>
+      <description>Optional path to a Netscape-format cookies.txt file. The file contains authentication data and should be kept private.</description>
     </key>
 
     <key name="cookies-from-browser" type="s">
       <default>''</default>
       <summary>Browser to read live cookies from</summary>
+      <description>Passed to yt-dlp's --cookies-from-browser option. Example: firefox or chrome. Reading browser cookies is sensitive.</description>
     </key>
 
     <key name="cookies-profile" type="s">
       <default>''</default>
       <summary>Browser profile name or config path</summary>
+      <description>Optional profile selector used with --cookies-from-browser. Choose the profile that is signed in to the target site.</description>
     </key>
 
     <key name="proxy" type="s">
       <default>''</default>
       <summary>Proxy URL for yt-dlp</summary>
+      <description>Passed to yt-dlp for network requests. Example: socks5://127.0.0.1:1080. Keep any embedded proxy credentials private.</description>
     </key>
 
     <key name="rate-limit" type="s">
       <default>''</default>
       <summary>Download rate limit</summary>
+      <description>Optional yt-dlp rate limit, for example 5M or 500K. Passed as a value to --limit-rate.</description>
     </key>
 
     <key name="concurrent-fragments" type="s">
       <default>''</default>
       <summary>Number of concurrent fragments</summary>
+      <description>Optional positive integer passed to --concurrent-fragments. Leave empty to use yt-dlp's default.</description>
     </key>
 
     <key name="custom-format-selector" type="s">
       <default>''</default>
       <summary>Custom yt-dlp format selector</summary>
+      <description>Passed directly as the value for yt-dlp's -f selector. See yt-dlp documentation for selector syntax.</description>
     </key>
 
     <key name="custom-args" type="s">
       <default>''</default>
       <summary>Extra yt-dlp arguments</summary>
+      <description>Additional arguments are parsed into separate argv items and passed directly to yt-dlp without a shell. Quote arguments containing spaces; only use options you trust.</description>
     </key>
 
     <key name="download-thumbnail" type="b">
