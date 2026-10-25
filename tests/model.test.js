@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { buildDownloadArgs, cleanClipboardUrl, cleanUrlText, formatSize, guessOutputPath, isPartialArtifactName, isPathWithinDirectory, splitCustomArgs, validateDownloadDirectory } from '../lib/model.js';
+import { buildDownloadArgs, cleanClipboardUrl, cleanUrlText, formatSize, guessOutputPath, isPartialArtifactName, isPathWithinDirectory, redactSensitiveLogText, splitCustomArgs, validateDownloadDirectory } from '../lib/model.js';
 
 test('splits ordinary whitespace-separated arguments', () => {
     assert.deepEqual(splitCustomArgs('--no-warnings --limit-rate 5M'), [
@@ -194,4 +194,14 @@ test('uses the ordinary audio selector when DRC is disabled', () => {
     const settings = { downloadDir: '/tmp/ytrawl-test', outputTemplate: '%(title)s.%(ext)s', preferDrc: false };
     const args = buildDownloadArgs(job, settings, false, '/home/test');
     assert.equal(args[args.indexOf('-f') + 1], 'bestaudio[language=en]/bestaudio');
+});
+
+
+test('redacts obvious cookie paths, proxy credentials, and token arguments', () => {
+    const log = redactSensitiveLogText('--cookies /home/user/.config/browser/cookies.txt --proxy http://alice:secret@proxy.example:8080 --token=abc123');
+    assert.match(log, /--cookies \[redacted\]/);
+    assert.match(log, /--proxy \[redacted\]/);
+    assert.match(log, /--token=\[redacted\]/);
+    assert.doesNotMatch(log, /cookies\.txt|alice:secret|abc123/);
+    assert.match(redactSensitiveLogText('Proxy URL: http://alice:secret@proxy.example:8080'), /Proxy URL: \[redacted\]/i);
 });
