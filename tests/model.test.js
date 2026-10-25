@@ -155,3 +155,21 @@ test('validates download directories while preserving empty and home defaults', 
     assert.notEqual(validateDownloadDirectory('/proc/media', '/home/test'), '');
     assert.notEqual(validateDownloadDirectory('/home/test/Downloads\nunsafe', '/home/test'), '');
 });
+
+
+test('places the intended URL before custom yt-dlp arguments', () => {
+    const job = {
+        url: 'https://example.com/video',
+        mode: 'video',
+        quality: 'best',
+        info: { isPlaylist: false },
+    };
+    const settings = {
+        downloadDir: '/tmp/ytrawl-test',
+        outputTemplate: '%(title)s.%(ext)s',
+        customArgs: '--limit-rate 5M',
+    };
+    const args = buildDownloadArgs(job, settings, false, '/home/test');
+    assert.ok(args.indexOf(job.url) < args.indexOf('--limit-rate'));
+    assert.equal(args[args.indexOf('--limit-rate') + 1], '5M');
+});
