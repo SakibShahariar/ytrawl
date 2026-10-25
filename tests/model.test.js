@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { archivePath, buildDownloadArgs, cleanClipboardUrl, cleanUrlText, formatSize, guessOutputPath, isPartialArtifactName, isPathWithinDirectory, redactSensitiveLogText, splitCustomArgs, validateDownloadDirectory } from '../lib/model.js';
+import { archivePath, buildDownloadArgs, cleanClipboardUrl, cleanUrlText, formatSize, guessOutputPath, isPartialArtifactName, isPathWithinDirectory, isSearchQuery, redactSensitiveLogText, splitCustomArgs, validateDownloadDirectory } from '../lib/model.js';
 
 test('splits ordinary whitespace-separated arguments', () => {
     assert.deepEqual(splitCustomArgs('--no-warnings --limit-rate 5M'), [
@@ -226,4 +226,12 @@ test('uses one shared archive path for yt-dlp arguments and archive clearing', (
     const archiveIndex = args.indexOf('--download-archive');
     assert.notEqual(archiveIndex, -1);
     assert.equal(args[archiveIndex + 1], archivePath('/home/test/Downloads'));
+});
+
+
+test('distinguishes raw search text from media URLs for privacy-sensitive history', () => {
+    assert.equal(isSearchQuery('private medical lecture'), true);
+    assert.equal(isSearchQuery('ytsearch1:private medical lecture'), false);
+    assert.equal(isSearchQuery('https://example.com/video'), false);
+    assert.equal(isSearchQuery('example.com/video'), false);
 });
