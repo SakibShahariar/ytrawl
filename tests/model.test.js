@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { buildDownloadArgs, cleanClipboardUrl, cleanUrlText, formatSize, isPathWithinDirectory, splitCustomArgs } from '../lib/model.js';
+import { buildDownloadArgs, cleanClipboardUrl, cleanUrlText, formatSize, guessOutputPath, isPathWithinDirectory, splitCustomArgs } from '../lib/model.js';
 
 test('splits ordinary whitespace-separated arguments', () => {
     assert.deepEqual(splitCustomArgs('--no-warnings --limit-rate 5M'), [
@@ -126,4 +126,12 @@ test('accepts only bounded public HTTP(S) clipboard URLs', () => {
     assert.equal(cleanClipboardUrl('https://127.0.0.1/private'), '');
     assert.equal(cleanClipboardUrl('https://example.com/video' + 'x'.repeat(4096)), '');
     assert.equal(cleanClipboardUrl('not a URL or media link'), '');
+});
+
+
+test('does not guess an output path for a custom yt-dlp template', () => {
+    const job = { mode: 'video' };
+    const info = { title: 'Example video' };
+    assert.equal(guessOutputPath({ downloadDir: '/home/test/Downloads', outputTemplate: '%(uploader)s/%(title)s.%(ext)s' }, job, info, '/home/test'), '');
+    assert.equal(guessOutputPath({ downloadDir: '/home/test/Downloads', outputTemplate: '%(title)s.%(ext)s' }, job, info, '/home/test'), '/home/test/Downloads/Example video.%(ext)s');
 });
