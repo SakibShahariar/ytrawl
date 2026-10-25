@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { buildDownloadArgs, cleanClipboardUrl, cleanUrlText, formatSize, guessOutputPath, isPartialArtifactName, isPathWithinDirectory, splitCustomArgs } from '../lib/model.js';
+import { buildDownloadArgs, cleanClipboardUrl, cleanUrlText, formatSize, guessOutputPath, isPartialArtifactName, isPathWithinDirectory, splitCustomArgs, validateDownloadDirectory } from '../lib/model.js';
 
 test('splits ordinary whitespace-separated arguments', () => {
     assert.deepEqual(splitCustomArgs('--no-warnings --limit-rate 5M'), [
@@ -144,4 +144,14 @@ test('matches partial artifacts only at the title boundary', () => {
     assert.equal(isPartialArtifactName('videography.mp4.part', 'video'), false);
     assert.equal(isPartialArtifactName('video-editor.mp4.part', 'video'), false);
     assert.equal(isPartialArtifactName('video.mp4', 'video'), false);
+});
+
+
+test('validates download directories while preserving empty and home defaults', () => {
+    assert.equal(validateDownloadDirectory('', '/home/test'), '');
+    assert.equal(validateDownloadDirectory('~/Downloads', '/home/test'), '');
+    assert.equal(validateDownloadDirectory('relative/Downloads', '/home/test'), 'Download directory must be an absolute path or begin with ~/.' );
+    assert.notEqual(validateDownloadDirectory('/', '/home/test'), '');
+    assert.notEqual(validateDownloadDirectory('/proc/media', '/home/test'), '');
+    assert.notEqual(validateDownloadDirectory('/home/test/Downloads\nunsafe', '/home/test'), '');
 });
