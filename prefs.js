@@ -4,6 +4,9 @@
 import Adw from 'gi://Adw';
 import Gio from 'gi://Gio';
 import Gtk from 'gi://Gtk';
+import GLib from 'gi://GLib';
+
+import * as Model from './lib/model.js';
 
 import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
@@ -49,13 +52,25 @@ function switchRow({ title, subtitle = '', settings, key, inverted = false }) {
     return row;
 }
 
-function entryRow({ title, subtitle = '', settings, key, placeholder = '' }) {
+function entryRow({ title, subtitle = '', settings, key, placeholder = '', validate = null }) {
     const entry = new Gtk.Entry({
         text: settings.get_string(key),
         placeholder_text: placeholder,
         hexpand: true,
     });
-    entry.connect('notify::text', () => settings.set_string(key, entry.text));
+    entry.connect('notify::text', () => {
+        if (validate) {
+            const message = validate(entry.text);
+            if (message) {
+                entry.add_css_class('error');
+                entry.set_tooltip_text(message);
+                return;
+            }
+            entry.remove_css_class('error');
+            entry.set_tooltip_text('');
+        }
+        settings.set_string(key, entry.text);
+    });
     settings.connect(`changed::${key}`, () => {
         if (entry.text !== settings.get_string(key)) entry.text = settings.get_string(key);
     });
@@ -126,6 +141,7 @@ export default class YtrawlPreferences extends ExtensionPreferences {
             settings,
             key: 'download-dir',
             placeholder: '~/Downloads',
+            validate: (value) => Model.validateDownloadDirectory(value, GLib.get_home_dir()),
         }));
         general.add(switchRow({
             title: 'Read URL from clipboard on open',
