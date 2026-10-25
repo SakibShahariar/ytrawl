@@ -78,6 +78,9 @@ does not evaluate them through a shell.
 
 ## Notes
 
+- For development diagnostics, launch GNOME Shell with `YTRAWL_DEBUG=1` in its
+  environment to warn when `stWidget()` drops unsupported properties. Normal
+  operation remains silent; restart the shell session after changing the environment.
 - The panel's raw log redacts obvious cookie paths, proxy values, credentialed URLs,
   and named token/password arguments. This is heuristic display-only filtering, not
   a complete secret detector; treat copied logs as potentially sensitive.
