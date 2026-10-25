@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { buildDownloadArgs, formatSize, splitCustomArgs } from '../lib/model.js';
+import { buildDownloadArgs, cleanUrlText, formatSize, splitCustomArgs } from '../lib/model.js';
 
 test('splits ordinary whitespace-separated arguments', () => {
     assert.deepEqual(splitCustomArgs('--no-warnings --limit-rate 5M'), [
@@ -86,4 +86,10 @@ test('formats terabyte-sized downloads without changing smaller units', () => {
     assert.equal(formatSize(1024 ** 3), '1.0 GB');
     assert.equal(formatSize(1024 ** 2), '1.0 MB');
     assert.equal(formatSize(1024), '1.0 KB');
+});
+
+
+test('strips the closing angle bracket from autolinked URLs', () => {
+    assert.equal(cleanUrlText('<https://example.com/video>'), 'https://example.com/video');
+    assert.equal(cleanUrlText('https://example.com/video'), 'https://example.com/video');
 });
