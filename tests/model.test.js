@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { buildDownloadArgs, splitCustomArgs } from '../lib/model.js';
+import { buildDownloadArgs, formatSize, splitCustomArgs } from '../lib/model.js';
 
 test('splits ordinary whitespace-separated arguments', () => {
     assert.deepEqual(splitCustomArgs('--no-warnings --limit-rate 5M'), [
@@ -78,4 +78,12 @@ test('does not add playlist item limits to a single video', () => {
     };
     const args = buildDownloadArgs(job, settings, false, '/home/test');
     assert.equal(args.includes('--playlist-items'), false);
+});
+
+
+test('formats terabyte-sized downloads without changing smaller units', () => {
+    assert.equal(formatSize(1024 ** 4), '1.0 TB');
+    assert.equal(formatSize(1024 ** 3), '1.0 GB');
+    assert.equal(formatSize(1024 ** 2), '1.0 MB');
+    assert.equal(formatSize(1024), '1.0 KB');
 });
