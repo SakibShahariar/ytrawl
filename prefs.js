@@ -309,7 +309,7 @@ export default class YtrawlPreferences extends ExtensionPreferences {
             placeholder: '5M',
             validate: (value) => {
                 const rate = value.trim();
-                return rate && (!/^\\d+(?:\\.\\d+)?(?:[KMGTPEZY](?:i?B)?)?$/i.test(rate) || Number.parseFloat(rate) <= 0)
+                return rate && (!/^\d+(?:\.\d+)?(?:[KMGTPEZY](?:i?B)?)?$/i.test(rate) || Number.parseFloat(rate) <= 0)
                     ? 'Use a positive rate such as 5M or 500K, or leave empty.'
                     : '';
             },
@@ -322,7 +322,7 @@ export default class YtrawlPreferences extends ExtensionPreferences {
             placeholder: '4',
             validate: (value) => {
                 const count = value.trim();
-                return count && (!/^\\d+$/.test(count) || Number(count) < 1)
+                return count && (!/^\d+$/.test(count) || Number(count) < 1)
                     ? 'Use a positive whole number, or leave empty.'
                     : '';
             },
