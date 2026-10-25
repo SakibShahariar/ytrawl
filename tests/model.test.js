@@ -122,8 +122,13 @@ test('contains opened output paths under the configured download directory', () 
 
 test('accepts only bounded public HTTP(S) clipboard URLs', () => {
     assert.equal(cleanClipboardUrl('https://example.com/video'), 'https://example.com/video');
+    assert.equal(cleanClipboardUrl('  https://example.com/video  '), 'https://example.com/video');
     assert.equal(cleanClipboardUrl('javascript:alert(1)'), '');
+    assert.equal(cleanClipboardUrl('file:///etc/passwd'), '');
+    assert.equal(cleanClipboardUrl('ftp://example.com/video'), '');
     assert.equal(cleanClipboardUrl('https://127.0.0.1/private'), '');
+    assert.equal(cleanClipboardUrl('https://localhost/private'), '');
+    assert.equal(cleanClipboardUrl('https://[::1]/private'), '');
     assert.equal(cleanClipboardUrl('https://example.com/video' + 'x'.repeat(4096)), '');
     assert.equal(cleanClipboardUrl('not a URL or media link'), '');
 });
