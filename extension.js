@@ -95,6 +95,7 @@ export default class YtrawlExtension extends Extension {
                 this._connectStageKey();
             } else {
                 this._disconnectStageKey();
+                if (this._panel) this._panel.onMenuClosed();
             }
         });
 
