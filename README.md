@@ -103,6 +103,9 @@ does not evaluate them through a shell.
   `schemas/gschemas.compiled` file is intentionally not tracked in Git.
 - Download history is stored in GNOME settings. You can disable **Remember
   download history** or clear saved URLs in the **History & Privacy** section
+  in Preferences. While history is disabled, new downloads are not added to the
+  in-memory history either, so turning it back on will not save URLs from the opt-out
+  period.
   of preferences. With remembering disabled, newly downloaded URLs are not
   persisted.
 - Thumbnail previews use a private directory under the user's cache
