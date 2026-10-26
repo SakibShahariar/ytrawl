@@ -89,6 +89,10 @@ does not evaluate them through a shell.
 - **Concurrent fragments** is left at yt-dlp's built-in default unless you set a positive integer in preferences. Raising it can speed up fragmented downloads on a fast connection, but also increases simultaneous network requests and disk/CPU pressure; keep the default on modest machines.
 - Download directories may be absolute paths or use `~/...`. Empty settings use
   `~/Downloads`; `/`, `/proc`, `/sys`, and `/dev` are rejected as unsafe targets.
+  Before downloading, Ytrawl checks available filesystem space when yt-dlp metadata
+  includes a usable size estimate. If the estimate plus a 10% margin exceeds free
+  space, it shows a warning but does not block the download. Unknown sizes and
+  filesystem-query failures do not prevent downloading.
 - **Reset settings to defaults** (in the panel's Advanced section) is
   destructive — it wipes cookies, proxy, custom args, and history — and
   requires clicking it twice within a few seconds to confirm.
