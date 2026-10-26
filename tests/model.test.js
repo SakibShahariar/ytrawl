@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { archivePath, buildDownloadArgs, cleanClipboardUrl, cleanUrlText, formatSize, guessOutputPath, isPartialArtifactName, isPathWithinDirectory, isSearchQuery, redactSensitiveLogText, splitCustomArgs, validateDownloadDirectory } from '../lib/model.js';
+import { archivePath, buildDownloadArgs, cleanClipboardUrl, cleanUrlText, formatSize, guessOutputPath, isPartialArtifactName, isPathWithinDirectory, isSafePublicUrl, isSearchQuery, redactSensitiveLogText, splitCustomArgs, validateDownloadDirectory } from '../lib/model.js';
 
 test('splits ordinary whitespace-separated arguments', () => {
     assert.deepEqual(splitCustomArgs('--no-warnings --limit-rate 5M'), [
@@ -133,6 +133,35 @@ test('accepts only bounded public HTTP(S) clipboard URLs', () => {
     assert.equal(cleanClipboardUrl('not a URL or media link'), '');
 });
 
+
+test('rejects non-public IP literal hosts in thumbnail URLs', () => {
+    for (const host of [
+        '127.0.0.1',
+        '10.0.0.4',
+        '100.64.0.1',
+        '169.254.10.20',
+        '172.20.1.2',
+        '192.0.2.10',
+        '192.168.1.1',
+        '198.18.0.1',
+        '198.51.100.4',
+        '203.0.113.5',
+        '224.0.0.1',
+        '255.255.255.255',
+        '[::]',
+        '[::1]',
+        '[::ffff:127.0.0.1]',
+        '[fc00::1]',
+        '[fd12:3456::1]',
+        '[fe80::1]',
+        '[ff02::1]',
+        '[2001:db8::1]',
+    ]) {
+        assert.equal(isSafePublicUrl('https://' + host + '/thumbnail.jpg'), false, host);
+    }
+    assert.equal(isSafePublicUrl('https://i.ytimg.com/vi/example/hqdefault.jpg'), true);
+    assert.equal(isSafePublicUrl('https://cdn.example.com/thumb.jpg'), true);
+});
 
 test('does not guess an output path for a custom yt-dlp template', () => {
     const job = { mode: 'video' };
