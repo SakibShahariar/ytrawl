@@ -322,17 +322,20 @@ export default class YtrawlExtension extends Extension {
     }
 
     _setupMatugenMonitor() {
-        const path = GLib.build_filenamev([GLib.get_home_dir(), '.config', 'matugen', 'matugen-colors.css']);
-        const file = Gio.File.new_for_path(path);
+        const directory = GLib.build_filenamev([GLib.get_home_dir(), '.config', 'matugen']);
+        const file = Gio.File.new_for_path(directory);
         try {
-            this._matugenMonitor = file.monitor_file(Gio.FileMonitorFlags.NONE, null);
+            // Monitor the containing directory rather than the CSS inode:
+            // Matugen commonly writes a temp file and renames it over the old
+            // one, which can leave a file monitor watching a stale inode.
+            this._matugenMonitor = file.monitor_directory(Gio.FileMonitorFlags.NONE, null);
         } catch (e) {
             this._matugenMonitor = null;
             return;
         }
-        connectSafe(this._matugenMonitor, 'changed', (monitor, _file, _other, eventType) => {
-            if (eventType === Gio.FileMonitorEvent.CHANGES_DONE_HINT ||
-                eventType === Gio.FileMonitorEvent.CHANGED) {
+        connectSafe(this._matugenMonitor, 'changed', (monitor, changedFile, otherFile) => {
+            const target = 'matugen-colors.css';
+            if (changedFile?.get_basename() === target || otherFile?.get_basename() === target) {
                 this._applyMatugenTheme();
             }
         });
