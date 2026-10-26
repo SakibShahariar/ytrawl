@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { archivePath, buildDownloadArgs, cleanClipboardUrl, cleanUrlText, formatSize, guessOutputPath, isPartialArtifactName, isPathWithinDirectory, isSafePublicUrl, isSearchQuery, redactSensitiveLogText, splitCustomArgs, validateDownloadDirectory } from '../lib/model.js';
+import { archivePath, buildDownloadArgs, cleanClipboardUrl, cleanUrlText, formatSize, guessOutputPath, isDiskSpaceLow, isPartialArtifactName, isPathWithinDirectory, isSafePublicUrl, isSearchQuery, redactSensitiveLogText, splitCustomArgs, validateDownloadDirectory } from '../lib/model.js';
 
 test('splits ordinary whitespace-separated arguments', () => {
     assert.deepEqual(splitCustomArgs('--no-warnings --limit-rate 5M'), [
@@ -80,6 +80,16 @@ test('does not add playlist item limits to a single video', () => {
     assert.equal(args.includes('--playlist-items'), false);
 });
 
+
+test('warns about low disk space only when an estimate is available', () => {
+    assert.equal(isDiskSpaceLow(500, 1000), true);
+    assert.equal(isDiskSpaceLow(1050, 1000), true);
+    assert.equal(isDiskSpaceLow(1100, 1000), false);
+    assert.equal(isDiskSpaceLow(5000, 1000), false);
+    assert.equal(isDiskSpaceLow(0, 0), false);
+    assert.equal(isDiskSpaceLow(500, NaN), false);
+    assert.equal(isDiskSpaceLow(NaN, 1000), false);
+});
 
 test('formats terabyte-sized downloads without changing smaller units', () => {
     assert.equal(formatSize(1024 ** 4), '1.0 TB');
