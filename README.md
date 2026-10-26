@@ -112,9 +112,10 @@ does not evaluate them through a shell.
 - Thumbnail previews use a private directory under the user's cache
   directory. Ytrawl removes leftover preview files when the extension starts
   and removes the current preview when it is replaced or the extension stops.
-  Thumbnail requests are limited to 3 redirects and 15 seconds, and curl is asked
-  to cap each response at 1 MiB. Literal private/loopback hosts are blocked, but
-  DNS rebinding and redirects to private addresses are not fully prevented.
+  Thumbnail requests have a 15-second timeout and a 1 MiB response limit. Curl
+  does not follow redirects, preventing redirect-to-private-address fetches;
+  thumbnails hosted behind redirects may therefore be unavailable. Literal
+  private/loopback hosts are blocked, but DNS rebinding is not fully prevented.
 
 ## License
 
