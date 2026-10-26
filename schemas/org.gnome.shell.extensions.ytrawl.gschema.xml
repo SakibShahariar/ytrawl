@@ -85,7 +85,7 @@
     <key name="concurrent-fragments" type="s">
       <default>''</default>
       <summary>Number of concurrent fragments</summary>
-      <description>Optional positive integer passed to --concurrent-fragments. Leave empty to use yt-dlp's default.</description>
+      <description>Optional positive integer passed to --concurrent-fragments. Leave empty to use yt-dlp's conservative built-in default. Higher values increase parallel fragment transfers and can raise network, disk, and CPU load.</description>
     </key>
 
     <key name="custom-format-selector" type="s">
