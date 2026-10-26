@@ -72,7 +72,10 @@ export default class YtrawlExtension extends Extension {
         // Route every controller state change through the panel and the
         // bar-icon pulse/tooltip.
         this._controller._refresh = () => {
-            this._panel.render();
+            // Downloads continue while the menu is closed, but rebuilding the
+            // panel then only wastes Shell work. The button still reflects the
+            // active state; render the latest snapshot when the menu reopens.
+            if (this._menuOpen) this._panel.render();
             this._syncButton();
         };
         this._historyChangedId = this._settings.connect('changed::history', () => {
@@ -92,6 +95,7 @@ export default class YtrawlExtension extends Extension {
             this._menuOpen = open;
             if (open) {
                 this._applyMatugenTheme();
+                this._panel.render();
                 this._onPanelOpened();
                 this._connectStageKey();
             } else {
