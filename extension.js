@@ -65,6 +65,7 @@ export default class YtrawlExtension extends Extension {
         this._matugenThemeFile = null;
         this._matugenCss = null;
         this._matugenMonitor = null;
+        this._matugenDebounceId = 0;
         this._applyMatugenTheme();
         this._setupMatugenMonitor();
 
@@ -335,13 +336,26 @@ export default class YtrawlExtension extends Extension {
         }
         connectSafe(this._matugenMonitor, 'changed', (monitor, changedFile, otherFile) => {
             const target = 'matugen-colors.css';
-            if (changedFile?.get_basename() === target || otherFile?.get_basename() === target) {
-                this._applyMatugenTheme();
+            if (changedFile?.get_basename() !== target && otherFile?.get_basename() !== target) return;
+            // Matugen may emit several events for one atomic replacement.
+            // Coalesce them so a burst only triggers one palette read/reload.
+            if (this._matugenDebounceId) {
+                GLib.source_remove(this._matugenDebounceId);
+                this._matugenDebounceId = 0;
             }
+            this._matugenDebounceId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 120, () => {
+                this._matugenDebounceId = 0;
+                this._applyMatugenTheme();
+                return GLib.SOURCE_REMOVE;
+            });
         });
     }
 
     _removeMatugenTheme() {
+        if (this._matugenDebounceId) {
+            try { GLib.source_remove(this._matugenDebounceId); } catch (e) { /* already removed */ }
+            this._matugenDebounceId = 0;
+        }
         if (this._matugenThemeFile) {
             try {
                 const theme = St.ThemeContext.get_for_stage(global.stage)?.get_theme();
