@@ -225,6 +225,22 @@ test('builds DRC audio selectors with language and normal-audio fallbacks', () =
     assert.equal(args[args.indexOf('-f') + 1], "bestaudio[language=en][format_id$='-drc']/bestaudio[language=en]/bestaudio");
 });
 
+test('builds a DRC-aware best-quality video selector with normal fallback', () => {
+    const job = { url: 'https://example.com/video', mode: 'video', quality: 'best', info: {} };
+    const settings = { downloadDir: '/tmp/ytrawl-test', outputTemplate: '%(title)s.%(ext)s', preferDrc: true };
+    const args = buildDownloadArgs(job, settings, false, '/home/test');
+    assert.equal(args[args.indexOf('-f') + 1],
+        "(bestvideo*+bestaudio[format_id$='-drc'])/(bestvideo*+bestaudio)/best");
+});
+
+test('builds DRC audio selector with a normal-audio fallback when no language is selected', () => {
+    const job = { url: 'https://example.com/audio', mode: 'audio', audioFormat: 'best', audioLanguage: '', info: {} };
+    const settings = { downloadDir: '/tmp/ytrawl-test', outputTemplate: '%(title)s.%(ext)s', preferDrc: true };
+    const args = buildDownloadArgs(job, settings, false, '/home/test');
+    assert.equal(args[args.indexOf('-f') + 1],
+        "bestaudio[format_id$='-drc']/bestaudio");
+});
+
 test('uses the ordinary audio selector when DRC is disabled', () => {
     const job = { url: 'https://example.com/audio', mode: 'audio', audioFormat: 'best', audioLanguage: 'en', info: {} };
     const settings = { downloadDir: '/tmp/ytrawl-test', outputTemplate: '%(title)s.%(ext)s', preferDrc: false };
