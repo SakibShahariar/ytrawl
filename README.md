@@ -86,6 +86,7 @@ does not evaluate them through a shell.
   and named token/password arguments. This is heuristic display-only filtering, not
   a complete secret detector; treat copied logs as potentially sensitive.
 - Metadata extraction times out after 2 minutes and rejects JSON output over 8 MiB. Large playlists or search results may exceed the limit; try opening a single video URL instead. The size check happens after subprocess output is collected, so it is not a hard peak-memory cap.
+- **Concurrent fragments** is left at yt-dlp's built-in default unless you set a positive integer in preferences. Raising it can speed up fragmented downloads on a fast connection, but also increases simultaneous network requests and disk/CPU pressure; keep the default on modest machines.
 - Download directories may be absolute paths or use `~/...`. Empty settings use
   `~/Downloads`; `/`, `/proc`, `/sys`, and `/dev` are rejected as unsafe targets.
 - **Reset settings to defaults** (in the panel's Advanced section) is
