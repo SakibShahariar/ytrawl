@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { archivePath, buildDownloadArgs, cleanClipboardUrl, cleanUrlText, formatSize, guessOutputPath, isDiskSpaceLow, isPartialArtifactName, isPathWithinDirectory, isSafePublicUrl, isSearchQuery, redactSensitiveLogText, splitCustomArgs, validateDownloadDirectory } from '../lib/model.js';
+import { archivePath, buildDownloadArgs, cleanClipboardUrl, cleanUrlText, formatSize, guessOutputPath, isDiskSpaceLow, isPartialArtifactName, isPathWithinDirectory, isSafePublicUrl, isSearchQuery, normalizeSharedQueueItem, redactSensitiveLogText, splitCustomArgs, validateDownloadDirectory } from '../lib/model.js';
 
 test('splits ordinary whitespace-separated arguments', () => {
     assert.deepEqual(splitCustomArgs('--no-warnings --limit-rate 5M'), [
@@ -289,4 +289,31 @@ test('distinguishes raw search text from media URLs for privacy-sensitive histor
     assert.equal(isSearchQuery('ytsearch1:private medical lecture'), false);
     assert.equal(isSearchQuery('https://example.com/video'), false);
     assert.equal(isSearchQuery('example.com/video'), false);
+});
+
+test('normalizes shared queue items into the version-1 inbox shape', () => {
+    const item = normalizeSharedQueueItem({
+        id: 'event-123',
+        url: 'https://www.youtube.com/watch?v=abc',
+        title: 'A title\u001b[31m',
+        mode: 'video',
+        quality: '720p',
+        audio_format: '',
+        created_at: '2026-10-28T00:00:00.000Z',
+    });
+    assert.deepEqual(item, {
+        id: 'event-123',
+        url: 'https://www.youtube.com/watch?v=abc',
+        title: 'A title [31m',
+        mode: 'video',
+        quality: '720p',
+        audio_format: '',
+        created_at: '2026-10-28T00:00:00.000Z',
+    });
+});
+
+test('rejects unsafe shared queue IDs, local URLs, and unsupported modes', () => {
+    assert.throws(() => normalizeSharedQueueItem({ id: '../bad', url: 'https://example.com', mode: 'video' }), /ID is invalid/);
+    assert.throws(() => normalizeSharedQueueItem({ id: 'event', url: 'http://127.0.0.1/admin', mode: 'video' }), /public HTTP/);
+    assert.throws(() => normalizeSharedQueueItem({ id: 'event', url: 'https://example.com', mode: 'shell' }), /mode must be video or audio/);
 });
