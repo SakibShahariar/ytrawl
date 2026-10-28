@@ -125,3 +125,10 @@ does not evaluate them through a shell.
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+
+## Send requests to ytui
+
+After pasting a URL and extracting its media details, use **Send to ytui** in the footer to add it to ytui's shared download inbox. The request stays pending until ytui imports it on startup or you choose **Import shared queue from Ytrawl** from ytui's colon command palette. This is separate from Ytrawl's own Queue and does not start a download in either app immediately.
+
+The shared inbox defaults to `$XDG_STATE_HOME/ytui/shared-queue.json` (normally `~/.local/state/ytui/shared-queue.json`). If ytui is not installed or not running, Ytrawl can still write the request for later. The file uses a versioned JSON format with a lock file and atomic replacement; malformed files, lock timeouts, and invalid URLs are reported without affecting Ytrawl's local queue. See the [shared queue format and safety notes](https://github.com/SakibShahariar/ytui/blob/master/docs/shared-queue.md).
