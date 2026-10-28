@@ -16,6 +16,7 @@ import {YtrawlPanel} from './lib/panel.js';
 import {openPath} from './lib/ytdlp.js';
 import {connectSafe, stWidget} from './lib/ui.js';
 import {loadMatugenColors, buildYtrawlCss} from './lib/matugen.js';
+import {appendSharedQueueItem} from './lib/shared-queue.js';
 
 const ICON_NAME = 'edit-download-symbolic';
 const MATUGEN_CSS_PATH = ['ytrawl-matugen.css'];
@@ -35,6 +36,7 @@ export default class YtrawlExtension extends Extension {
                 openFolder: (path) => openPath(path),
                 openUrl: (url) => openPath(url),
                 resetSettings: () => this._resetSettings(),
+                addSharedQueueItem: (item) => appendSharedQueueItem(item),
             },
         });
 
