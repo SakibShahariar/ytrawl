@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { archivePath, buildDownloadArgs, cleanClipboardUrl, cleanUrlText, ffmpegVersionCommand, formatSize, guessOutputPath, infoCommand, isDiskSpaceLow, isPartialArtifactName, isPathWithinDirectory, isSafePublicUrl, isSearchQuery, normalizeSharedQueueItem, redactSensitiveLogText, shouldReuseMediaInfo, splitCustomArgs, validateConcurrentFragments, validateDownloadDirectory, validateExecutablePath, validateRateLimit, validateStallTimeoutMinutes, versionCommand, wrapDownloadCommand } from '../lib/model.js';
+import { archivePath, buildDownloadArgs, cleanClipboardUrl, cleanUrlText, ffmpegVersionCommand, formatSize, guessOutputPath, infoCommand, isDiskSpaceLow, isPartialArtifactName, isPathWithinDirectory, isSafePublicUrl, isSearchQuery, normalizeSharedQueueItem, parseInfo, redactSensitiveLogText, shouldReuseMediaInfo, splitCustomArgs, validateConcurrentFragments, validateDownloadDirectory, validateExecutablePath, validateRateLimit, validateStallTimeoutMinutes, versionCommand, wrapDownloadCommand } from '../lib/model.js';
 
 test('splits ordinary whitespace-separated arguments', () => {
     assert.deepEqual(splitCustomArgs('--no-warnings --limit-rate 5M'), [
@@ -28,6 +28,30 @@ test('preserves an explicitly empty quoted argument', () => {
 
 test('rejects an unclosed quote', () => {
     assert.throws(() => splitCustomArgs('--cookies "unfinished path'), /Unclosed quote/);
+});
+
+test('parses valid chapter metadata and ignores malformed chapter timestamps', () => {
+    const parsed = parseInfo(JSON.stringify({
+        title: 'Chapters demo',
+        duration: 120,
+        chapters: [
+            { start_time: 0, title: 'Intro' },
+            { start_time: 45.5, title: 'Main section' },
+            { start_time: -1, title: 'Invalid negative' },
+            { start_time: 'not-a-time', title: 'Invalid text' },
+            { start_time: 80 },
+        ],
+    }));
+    assert.deepEqual(parsed.chapters, [
+        { startTime: 0, title: 'Intro' },
+        { startTime: 45.5, title: 'Main section' },
+        { startTime: 80, title: 'Chapter 5' },
+    ]);
+});
+
+test('returns an empty chapter list when yt-dlp has no chapters', () => {
+    const parsed = parseInfo(JSON.stringify({ title: 'No chapters', duration: 30 }));
+    assert.deepEqual(parsed.chapters, []);
 });
 
 test('reuses only fresh metadata for the same URL', () => {

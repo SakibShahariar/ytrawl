@@ -23,6 +23,13 @@ If either executable isn't found at its configured path (or on `PATH` when its s
 
 Preferences → Network includes **Lower download CPU and I/O priority**, disabled by default. When enabled, downloads are wrapped with Linux `nice +10` and `ionice` best-effort class priority 7; the setting does not change metadata extraction or the default execution path. Gio.Subprocess does not expose portable CPU/I/O priority setters, so this relies on the Linux `nice` and `ionice` utilities. If either utility is unavailable, Ytrawl reports the configuration error instead of silently pretending the priority was applied.
 
+## Chapters
+
+When yt-dlp provides chapter metadata, Ytrawl shows a compact, expandable
+chapter list with timestamps and titles in the media panel. The list is hidden
+when no chapters are available. It is informational only: GNOME Shell does not
+provide playback seeking for these downloads.
+
 ## Stalled downloads
 
 In Preferences → Network, **Stall timeout (minutes)** is optional and disabled by default. Set it to a value from 1 to 1440 to fail a download if yt-dlp emits no progress update for that many minutes. The timeout resets whenever progress arrives, and a stalled job is terminated with its child processes, partial artifacts are cleaned up, and the queue follows the normal stop-on-error setting. Slow but progressing downloads are not timed out.
