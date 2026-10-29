@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { archivePath, buildDownloadArgs, cleanClipboardUrl, cleanUrlText, formatSize, guessOutputPath, isDiskSpaceLow, isPartialArtifactName, isPathWithinDirectory, isSafePublicUrl, isSearchQuery, normalizeSharedQueueItem, redactSensitiveLogText, shouldReuseMediaInfo, splitCustomArgs, validateDownloadDirectory } from '../lib/model.js';
+import { archivePath, buildDownloadArgs, cleanClipboardUrl, cleanUrlText, formatSize, guessOutputPath, isDiskSpaceLow, isPartialArtifactName, isPathWithinDirectory, isSafePublicUrl, isSearchQuery, normalizeSharedQueueItem, redactSensitiveLogText, shouldReuseMediaInfo, splitCustomArgs, validateConcurrentFragments, validateDownloadDirectory, validateRateLimit } from '../lib/model.js';
 
 test('splits ordinary whitespace-separated arguments', () => {
     assert.deepEqual(splitCustomArgs('--no-warnings --limit-rate 5M'), [
@@ -38,6 +38,33 @@ test('reuses only fresh metadata for the same URL', () => {
     assert.equal(shouldReuseMediaInfo(null, 'https://example.com/watch?v=1', 'https://example.com/watch?v=1', 99000, now), false);
     assert.equal(shouldReuseMediaInfo(info, 'https://example.com/watch?v=1', 'https://example.com/watch?v=1', 1, now, 5000), false);
     assert.equal(shouldReuseMediaInfo(info, 'https://example.com/watch?v=1', 'https://example.com/watch?v=1', 101000, now), false);
+});
+
+test('validates rate limit and concurrent fragment settings', () => {
+    assert.equal(validateRateLimit(''), '');
+    assert.equal(validateRateLimit('5M'), '');
+    assert.equal(validateRateLimit('1.5MiB'), '');
+    assert.notEqual(validateRateLimit('0M'), '');
+    assert.notEqual(validateRateLimit('fast'), '');
+    assert.equal(validateConcurrentFragments(''), '');
+    assert.equal(validateConcurrentFragments('4'), '');
+    assert.notEqual(validateConcurrentFragments('0'), '');
+    assert.notEqual(validateConcurrentFragments('2.5'), '');
+
+    const job = {
+        url: 'https://example.com/video',
+        mode: 'video',
+        quality: 'best',
+        info: { isPlaylist: false },
+    };
+    assert.throws(() => buildDownloadArgs(job, {
+        downloadDir: '/tmp/ytrawl-test',
+        rateLimit: 'invalid',
+    }, false, '/home/test'), /positive rate/);
+    assert.throws(() => buildDownloadArgs(job, {
+        downloadDir: '/tmp/ytrawl-test',
+        concurrentFragments: '0',
+    }, false, '/home/test'), /positive whole number/);
 });
 
 test('limits playlist downloads to the configured first items', () => {
