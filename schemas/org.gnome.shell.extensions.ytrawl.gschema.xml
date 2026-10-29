@@ -2,6 +2,18 @@
 <schemalist gettext-domain="ytrawl">
   <schema id="org.gnome.shell.extensions.ytrawl" path="/org/gnome/shell/extensions/ytrawl/">
 
+    <key name="yt-dlp-path" type="s">
+      <default>''</default>
+      <summary>Path to yt-dlp executable</summary>
+      <description>Optional absolute path to yt-dlp. Empty uses PATH.</description>
+    </key>
+
+    <key name="ffmpeg-path" type="s">
+      <default>''</default>
+      <summary>Path to ffmpeg executable</summary>
+      <description>Optional absolute path to ffmpeg. Empty uses PATH.</description>
+    </key>
+
     <key name="download-dir" type="s">
       <default>''</default>
       <summary>Download directory</summary>
