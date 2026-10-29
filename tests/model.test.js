@@ -45,7 +45,7 @@ test('validates optional executable paths and preserves PATH defaults', () => {
     assert.equal(validateExecutablePath('/usr/bin/yt-dlp'), '');
     assert.equal(validateExecutablePath('/home/user/My Tools/yt-dlp'), '');
     assert.match(validateExecutablePath('yt-dlp'), /absolute executable path/);
-    assert.match(validateExecutablePath('/usr/bin/yt-dlp\\nunsafe'), /control characters/);
+    assert.match(validateExecutablePath('/usr/bin/yt-dlp\nunsafe'), /control characters/);
     assert.deepEqual(versionCommand(), ['yt-dlp', '--version']);
     assert.deepEqual(versionCommand('/home/user/My Tools/yt-dlp'), ['/home/user/My Tools/yt-dlp', '--version']);
     assert.deepEqual(ffmpegVersionCommand(), ['ffmpeg', '-version']);
