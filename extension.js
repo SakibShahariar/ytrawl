@@ -80,6 +80,9 @@ export default class YtrawlExtension extends Extension {
             if (this._menuOpen) this._panel.render();
             this._syncButton();
         };
+        this._controller._refreshProgressUI = () => {
+            if (this._menuOpen) this._panel.refreshProgress();
+        };
         this._historyChangedId = this._settings.connect('changed::history', () => {
             if (!this._controller) return;
             this._controller.history = [...this._settings.get_strv('history')];
