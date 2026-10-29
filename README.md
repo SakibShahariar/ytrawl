@@ -30,6 +30,14 @@ chapter list with timestamps and titles in the media panel. The list is hidden
 when no chapters are available. It is informational only: GNOME Shell does not
 provide playback seeking for these downloads.
 
+## Download notifications
+
+Ytrawl sends system notifications for completed and failed downloads even when
+the panel is closed. Queue runs are summarized to avoid one notification per
+item; an explicitly cancelled download gets a distinct cancellation notice.
+The **Reduce motion** preference only changes the panel's busy animation and
+does not suppress download notifications.
+
 ## Stalled downloads
 
 In Preferences → Network, **Stall timeout (minutes)** is optional and disabled by default. Set it to a value from 1 to 1440 to fail a download if yt-dlp emits no progress update for that many minutes. The timeout resets whenever progress arrives, and a stalled job is terminated with its child processes, partial artifacts are cleaned up, and the queue follows the normal stop-on-error setting. Slow but progressing downloads are not timed out.
