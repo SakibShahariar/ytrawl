@@ -337,6 +337,14 @@ export default class YtrawlPreferences extends ExtensionPreferences {
             placeholder: '4',
             validate: Model.validateConcurrentFragments,
         }));
+        net.add(entryRow({
+            title: 'Stall timeout (minutes)',
+            subtitle: 'Optional: fail a download after no progress. Empty disables it.',
+            settings,
+            key: 'stall-timeout-minutes',
+            placeholder: '10',
+            validate: Model.validateStallTimeoutMinutes,
+        }));
         net.add(comboRow({
             title: 'Cookies from browser',
             settings,

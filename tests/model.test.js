@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { archivePath, buildDownloadArgs, cleanClipboardUrl, cleanUrlText, ffmpegVersionCommand, formatSize, guessOutputPath, infoCommand, isDiskSpaceLow, isPartialArtifactName, isPathWithinDirectory, isSafePublicUrl, isSearchQuery, normalizeSharedQueueItem, redactSensitiveLogText, shouldReuseMediaInfo, splitCustomArgs, validateConcurrentFragments, validateDownloadDirectory, validateExecutablePath, validateRateLimit, versionCommand } from '../lib/model.js';
+import { archivePath, buildDownloadArgs, cleanClipboardUrl, cleanUrlText, ffmpegVersionCommand, formatSize, guessOutputPath, infoCommand, isDiskSpaceLow, isPartialArtifactName, isPathWithinDirectory, isSafePublicUrl, isSearchQuery, normalizeSharedQueueItem, redactSensitiveLogText, shouldReuseMediaInfo, splitCustomArgs, validateConcurrentFragments, validateDownloadDirectory, validateExecutablePath, validateRateLimit, validateStallTimeoutMinutes, versionCommand } from '../lib/model.js';
 
 test('splits ordinary whitespace-separated arguments', () => {
     assert.deepEqual(splitCustomArgs('--no-warnings --limit-rate 5M'), [
@@ -38,6 +38,16 @@ test('reuses only fresh metadata for the same URL', () => {
     assert.equal(shouldReuseMediaInfo(null, 'https://example.com/watch?v=1', 'https://example.com/watch?v=1', 99000, now), false);
     assert.equal(shouldReuseMediaInfo(info, 'https://example.com/watch?v=1', 'https://example.com/watch?v=1', 1, now, 5000), false);
     assert.equal(shouldReuseMediaInfo(info, 'https://example.com/watch?v=1', 'https://example.com/watch?v=1', 101000, now), false);
+});
+
+test('validates optional download stall timeout', () => {
+    assert.equal(validateStallTimeoutMinutes(''), '');
+    assert.equal(validateStallTimeoutMinutes('10'), '');
+    assert.equal(validateStallTimeoutMinutes('1440'), '');
+    assert.match(validateStallTimeoutMinutes('0'), /1 to 1440/);
+    assert.match(validateStallTimeoutMinutes('-1'), /1 to 1440/);
+    assert.match(validateStallTimeoutMinutes('1.5'), /whole number/);
+    assert.match(validateStallTimeoutMinutes('1441'), /1 to 1440/);
 });
 
 test('validates optional executable paths and preserves PATH defaults', () => {

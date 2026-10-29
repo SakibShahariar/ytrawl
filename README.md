@@ -19,6 +19,10 @@ history along the way.
 
 If either executable isn't found at its configured path (or on `PATH` when its setting is empty), the panel shows a banner the next time you open it. Configured paths must be absolute; they are passed as individual argv items, never through a shell.
 
+## Stalled downloads
+
+In Preferences → Network, **Stall timeout (minutes)** is optional and disabled by default. Set it to a value from 1 to 1440 to fail a download if yt-dlp emits no progress update for that many minutes. The timeout resets whenever progress arrives, and a stalled job is terminated with its child processes, partial artifacts are cleaned up, and the queue follows the normal stop-on-error setting. Slow but progressing downloads are not timed out.
+
 ## Install
 
 ```bash
