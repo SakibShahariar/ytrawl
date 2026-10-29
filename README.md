@@ -9,16 +9,15 @@ history along the way.
 ## Requirements
 
 - GNOME Shell 45–50
-- [`yt-dlp`](https://github.com/yt-dlp/yt-dlp) on `PATH`
-- [`ffmpeg`](https://ffmpeg.org/) on `PATH` (needed for merging separate
+- [`yt-dlp`](https://github.com/yt-dlp/yt-dlp) on `PATH`, or set its absolute executable path in Preferences
+- [`ffmpeg`](https://ffmpeg.org/) on `PATH`, or set its absolute executable path in Preferences (needed for merging separate
   video/audio streams, embedding subtitles/thumbnails, and audio format
   conversion)
 - `curl` on `PATH` (used for thumbnail preview fetching)
 - Optional: [`matugen`](https://github.com/InioX/matugen) if you want the
   panel to pick up your system's Material You palette automatically
 
-If either `yt-dlp` or `ffmpeg` isn't found, the panel shows a banner
-saying so the next time you open it.
+If either executable isn't found at its configured path (or on `PATH` when its setting is empty), the panel shows a banner the next time you open it. Configured paths must be absolute; they are passed as individual argv items, never through a shell.
 
 ## Install
 
@@ -58,6 +57,8 @@ gnome-extensions prefs ytrawl@sakib.dev
 - **General** — clipboard auto-fill/auto-extract, download archive (skip
   already-downloaded media), reduced motion, default post-download action,
   audio format, and playlist download limit.
+- **Executables** — optional absolute paths for `yt-dlp` and `ffmpeg`; leave
+  either field empty to use the corresponding command from `PATH`.
 - **Media** — thumbnails (save/embed), subtitles (embed/save separately/
   include auto-captions), and DRC audio preference.
 - **SponsorBlock** — category selection for segment removal.
