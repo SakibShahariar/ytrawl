@@ -100,6 +100,12 @@
       <description>Optional positive integer passed to --concurrent-fragments. Leave empty to use yt-dlp's conservative built-in default. Higher values increase parallel fragment transfers and can raise network, disk, and CPU load.</description>
     </key>
 
+    <key name="lower-download-priority" type="b">
+      <default>false</default>
+      <summary>Lower download CPU and I/O priority</summary>
+      <description>Opt-in use of the Linux nice and ionice utilities for download subprocesses. Disabled by default.</description>
+    </key>
+
     <key name="stall-timeout-minutes" type="s">
       <default>''</default>
       <summary>Download stall timeout in minutes</summary>

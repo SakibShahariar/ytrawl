@@ -337,6 +337,12 @@ export default class YtrawlPreferences extends ExtensionPreferences {
             placeholder: '4',
             validate: Model.validateConcurrentFragments,
         }));
+        net.add(switchRow({
+            title: 'Lower download CPU and I/O priority',
+            subtitle: 'Uses nice +10 and ionice best-effort priority 7 on Linux.',
+            settings,
+            key: 'lower-download-priority',
+        }));
         net.add(entryRow({
             title: 'Stall timeout (minutes)',
             subtitle: 'Optional: fail a download after no progress. Empty disables it.',

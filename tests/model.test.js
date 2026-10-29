@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { archivePath, buildDownloadArgs, cleanClipboardUrl, cleanUrlText, ffmpegVersionCommand, formatSize, guessOutputPath, infoCommand, isDiskSpaceLow, isPartialArtifactName, isPathWithinDirectory, isSafePublicUrl, isSearchQuery, normalizeSharedQueueItem, redactSensitiveLogText, shouldReuseMediaInfo, splitCustomArgs, validateConcurrentFragments, validateDownloadDirectory, validateExecutablePath, validateRateLimit, validateStallTimeoutMinutes, versionCommand } from '../lib/model.js';
+import { archivePath, buildDownloadArgs, cleanClipboardUrl, cleanUrlText, ffmpegVersionCommand, formatSize, guessOutputPath, infoCommand, isDiskSpaceLow, isPartialArtifactName, isPathWithinDirectory, isSafePublicUrl, isSearchQuery, normalizeSharedQueueItem, redactSensitiveLogText, shouldReuseMediaInfo, splitCustomArgs, validateConcurrentFragments, validateDownloadDirectory, validateExecutablePath, validateRateLimit, validateStallTimeoutMinutes, versionCommand, wrapDownloadCommand } from '../lib/model.js';
 
 test('splits ordinary whitespace-separated arguments', () => {
     assert.deepEqual(splitCustomArgs('--no-warnings --limit-rate 5M'), [
@@ -38,6 +38,23 @@ test('reuses only fresh metadata for the same URL', () => {
     assert.equal(shouldReuseMediaInfo(null, 'https://example.com/watch?v=1', 'https://example.com/watch?v=1', 99000, now), false);
     assert.equal(shouldReuseMediaInfo(info, 'https://example.com/watch?v=1', 'https://example.com/watch?v=1', 1, now, 5000), false);
     assert.equal(shouldReuseMediaInfo(info, 'https://example.com/watch?v=1', 'https://example.com/watch?v=1', 101000, now), false);
+});
+
+test('lower download priority is opt-in and wraps only when enabled', () => {
+    const argv = ['/usr/bin/yt-dlp', '--newline', 'https://example.com/video'];
+    assert.deepEqual(wrapDownloadCommand(argv, { lowerDownloadPriority: false }), argv);
+    assert.deepEqual(wrapDownloadCommand(argv, { lowerDownloadPriority: true }, {
+        nicePath: '/usr/bin/nice',
+        ionicePath: '/usr/bin/ionice',
+    }), [
+        '/usr/bin/nice', '-n', '10',
+        '/usr/bin/ionice', '-c', '2', '-n', '7',
+        ...argv,
+    ]);
+    assert.throws(
+        () => wrapDownloadCommand(argv, { lowerDownloadPriority: true }, { nicePath: '/usr/bin/nice' }),
+        /nice and ionice utilities/,
+    );
 });
 
 test('validates optional download stall timeout', () => {
