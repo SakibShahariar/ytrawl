@@ -307,7 +307,7 @@ export default class YtrawlPreferences extends ExtensionPreferences {
             settings,
             key: 'rate-limit',
             placeholder: '5M',
-            validate: Model.validateRateLimit,,
+            validate: Model.validateRateLimit,
         }));
         net.add(entryRow({
             title: 'Concurrent fragments',
@@ -315,7 +315,7 @@ export default class YtrawlPreferences extends ExtensionPreferences {
             settings,
             key: 'concurrent-fragments',
             placeholder: '4',
-            validate: Model.validateConcurrentFragments,,
+            validate: Model.validateConcurrentFragments,
         }));
         net.add(comboRow({
             title: 'Cookies from browser',
