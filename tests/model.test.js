@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { archivePath, buildDownloadArgs, cleanClipboardUrl, cleanUrlText, formatSize, guessOutputPath, isDiskSpaceLow, isPartialArtifactName, isPathWithinDirectory, isSafePublicUrl, isSearchQuery, normalizeSharedQueueItem, redactSensitiveLogText, splitCustomArgs, validateDownloadDirectory } from '../lib/model.js';
+import { archivePath, buildDownloadArgs, cleanClipboardUrl, cleanUrlText, formatSize, guessOutputPath, isDiskSpaceLow, isPartialArtifactName, isPathWithinDirectory, isSafePublicUrl, isSearchQuery, normalizeSharedQueueItem, redactSensitiveLogText, shouldReuseMediaInfo, splitCustomArgs, validateDownloadDirectory } from '../lib/model.js';
 
 test('splits ordinary whitespace-separated arguments', () => {
     assert.deepEqual(splitCustomArgs('--no-warnings --limit-rate 5M'), [
@@ -28,6 +28,16 @@ test('preserves an explicitly empty quoted argument', () => {
 
 test('rejects an unclosed quote', () => {
     assert.throws(() => splitCustomArgs('--cookies "unfinished path'), /Unclosed quote/);
+});
+
+test('reuses only fresh metadata for the same URL', () => {
+    const info = { title: 'Example' };
+    const now = 100000;
+    assert.equal(shouldReuseMediaInfo(info, 'https://example.com/watch?v=1', 'https://example.com/watch?v=1', 99000, now), true);
+    assert.equal(shouldReuseMediaInfo(info, 'https://example.com/watch?v=1', 'https://example.com/watch?v=2', 99000, now), false);
+    assert.equal(shouldReuseMediaInfo(null, 'https://example.com/watch?v=1', 'https://example.com/watch?v=1', 99000, now), false);
+    assert.equal(shouldReuseMediaInfo(info, 'https://example.com/watch?v=1', 'https://example.com/watch?v=1', 1, now, 5000), false);
+    assert.equal(shouldReuseMediaInfo(info, 'https://example.com/watch?v=1', 'https://example.com/watch?v=1', 101000, now), false);
 });
 
 test('limits playlist downloads to the configured first items', () => {
