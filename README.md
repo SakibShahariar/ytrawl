@@ -8,7 +8,7 @@ history along the way.
 
 ## Requirements
 
-- GNOME Shell 45–50
+- GNOME Shell 45–51 (GNOME Shell 51 metadata support added; live Shell 51 smoke test still recommended)
 - [`yt-dlp`](https://github.com/yt-dlp/yt-dlp) on `PATH`, or set its absolute executable path in Preferences
 - [`ffmpeg`](https://ffmpeg.org/) on `PATH`, or set its absolute executable path in Preferences (needed for merging separate
   video/audio streams, embedding subtitles/thumbnails, and audio format
