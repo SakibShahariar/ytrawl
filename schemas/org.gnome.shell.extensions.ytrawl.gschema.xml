@@ -154,7 +154,14 @@
     <key name="playlist-limit" type="s">
       <default>'all'</default>
       <summary>Maximum playlist items to download</summary>
-      <description>Use all items, or limit playlist downloads to the first 1, 5, 10, or 20 items.</description>
+      <description>Applies to playlist URLs only. Choose all items, or the first 1, 5, 10, or 20 items.</description>
+      <choices>
+        <choice value="all"/>
+        <choice value="1"/>
+        <choice value="5"/>
+        <choice value="10"/>
+        <choice value="20"/>
+      </choices>
     </key>
 
     <key name="history" type="as">
@@ -170,6 +177,13 @@
     <key name="post-download-action" type="s">
       <default>'nothing'</default>
       <summary>Action after a download completes</summary>
+      <description>Choose whether to do nothing, copy the saved path, open the download folder, or open the downloaded file.</description>
+      <choices>
+        <choice value="nothing"/>
+        <choice value="copy"/>
+        <choice value="open"/>
+        <choice value="openFile"/>
+      </choices>
     </key>
 
   </schema>
