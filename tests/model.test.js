@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { archivePath, buildDownloadArgs, cleanClipboardUrl, cleanUrlText, formatSize, guessOutputPath, isDiskSpaceLow, isPartialArtifactName, isPathWithinDirectory, isSafePublicUrl, isSearchQuery, normalizeSharedQueueItem, redactSensitiveLogText, shouldReuseMediaInfo, splitCustomArgs, validateConcurrentFragments, validateDownloadDirectory, validateRateLimit } from '../lib/model.js';
+import { archivePath, buildDownloadArgs, cleanClipboardUrl, cleanUrlText, ffmpegVersionCommand, formatSize, guessOutputPath, infoCommand, isDiskSpaceLow, isPartialArtifactName, isPathWithinDirectory, isSafePublicUrl, isSearchQuery, normalizeSharedQueueItem, redactSensitiveLogText, shouldReuseMediaInfo, splitCustomArgs, validateConcurrentFragments, validateDownloadDirectory, validateExecutablePath, validateRateLimit, versionCommand } from '../lib/model.js';
 
 test('splits ordinary whitespace-separated arguments', () => {
     assert.deepEqual(splitCustomArgs('--no-warnings --limit-rate 5M'), [
@@ -38,6 +38,35 @@ test('reuses only fresh metadata for the same URL', () => {
     assert.equal(shouldReuseMediaInfo(null, 'https://example.com/watch?v=1', 'https://example.com/watch?v=1', 99000, now), false);
     assert.equal(shouldReuseMediaInfo(info, 'https://example.com/watch?v=1', 'https://example.com/watch?v=1', 1, now, 5000), false);
     assert.equal(shouldReuseMediaInfo(info, 'https://example.com/watch?v=1', 'https://example.com/watch?v=1', 101000, now), false);
+});
+
+test('validates optional executable paths and preserves PATH defaults', () => {
+    assert.equal(validateExecutablePath(''), '');
+    assert.equal(validateExecutablePath('/usr/bin/yt-dlp'), '');
+    assert.equal(validateExecutablePath('/home/user/My Tools/yt-dlp'), '');
+    assert.match(validateExecutablePath('yt-dlp'), /absolute executable path/);
+    assert.match(validateExecutablePath('/usr/bin/yt-dlp\\nunsafe'), /control characters/);
+    assert.deepEqual(versionCommand(), ['yt-dlp', '--version']);
+    assert.deepEqual(versionCommand('/home/user/My Tools/yt-dlp'), ['/home/user/My Tools/yt-dlp', '--version']);
+    assert.deepEqual(ffmpegVersionCommand(), ['ffmpeg', '-version']);
+    assert.deepEqual(ffmpegVersionCommand('/opt/tools/ffmpeg'), ['/opt/tools/ffmpeg', '-version']);
+});
+
+test('uses configured executable paths as argv items without a shell', () => {
+    const job = { url: 'https://example.com/video', mode: 'video', quality: 'best', info: { isPlaylist: false } };
+    const settings = {
+        downloadDir: '/tmp/ytrawl-test',
+        outputTemplate: '%(title)s.%(ext)s',
+        ytDlpPath: '/home/test/My Tools/yt-dlp',
+        ffmpegPath: '/home/test/My Tools/ffmpeg',
+    };
+    const args = buildDownloadArgs(job, settings, false, '/home/test');
+    assert.equal(args[0], '/home/test/My Tools/yt-dlp');
+    assert.equal(args[args.indexOf('--ffmpeg-location') + 1], '/home/test/My Tools/ffmpeg');
+    assert.equal(infoCommand(job.url, settings, false, '/home/test')[0], '/home/test/My Tools/yt-dlp');
+    assert.throws(() => infoCommand(job.url, { ...settings, ytDlpPath: 'relative/yt-dlp' }, false, '/home/test'), /yt-dlp path:.*absolute/);
+    assert.throws(() => buildDownloadArgs(job, { ...settings, ytDlpPath: 'relative/yt-dlp' }, false, '/home/test'), /yt-dlp path:.*absolute/);
+    assert.throws(() => buildDownloadArgs(job, { ...settings, ffmpegPath: 'ffmpeg' }, false, '/home/test'), /ffmpeg path:.*absolute/);
 });
 
 test('validates rate limit and concurrent fragment settings', () => {
