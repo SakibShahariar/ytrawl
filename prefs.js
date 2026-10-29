@@ -212,6 +212,26 @@ export default class YtrawlPreferences extends ExtensionPreferences {
         }));
         page.add(general.group);
 
+        // Executables
+        const tools = groupRow({ title: 'Executables' });
+        tools.add(entryRow({
+            title: 'yt-dlp executable path',
+            subtitle: 'Optional absolute path. Empty uses PATH.',
+            settings,
+            key: 'yt-dlp-path',
+            placeholder: '/home/user/.local/bin/yt-dlp',
+            validate: Model.validateExecutablePath,
+        }));
+        tools.add(entryRow({
+            title: 'ffmpeg executable path',
+            subtitle: 'Optional absolute path. Empty uses PATH.',
+            settings,
+            key: 'ffmpeg-path',
+            placeholder: '/home/user/.local/bin/ffmpeg',
+            validate: Model.validateExecutablePath,
+        }));
+        page.add(tools.group);
+
         // History and privacy.
         const privacy = groupRow({ title: 'History & Privacy' });
         for (const row of historyPrivacyRows(settings)) privacy.add(row);
