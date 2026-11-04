@@ -33,6 +33,11 @@ These instructions apply to the entire repository. Follow any more specific `AGE
 - After editing an issue description or state, fetch it again and confirm that the intended checklist and status were saved.
 
 
+### Acceptance Criteria Integrity
+
+- Acceptance criteria must reflect reality: check a criterion only when its complete requirement is implemented and supported by concrete evidence. Leave incomplete, partial, untested, and unverified criteria unchecked. Before closing an issue, compare every checkbox with the current code, tests, CI, and required manual validation. Do not infer completion from a commit or closed issue. Reopen previously closed issues when required criteria remain unmet or unverified, and explain the remaining work.
+
+
 ## Code Quality and Testing
 
 - Follow the repository's established formatting, naming, documentation, dependency, and error-handling conventions.
