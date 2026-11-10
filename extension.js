@@ -52,6 +52,7 @@ export default class YtrawlExtension extends Extension {
         this._panel = new YtrawlPanel(this._controller, {
             menu: this._indicator.menu,
             onClose: () => this._indicator.menu.close(),
+            panelWidth: this._getPanelWidth(),
         });
 
         const item = new PopupMenu.PopupBaseMenuItem({ reactive: false });
@@ -99,6 +100,7 @@ export default class YtrawlExtension extends Extension {
         connectSafe(this._indicator.menu, 'open-state-changed', (menu, open) => {
             this._menuOpen = open;
             if (open) {
+                this._panel.setWidth(this._getPanelWidth());
                 this._applyMatugenTheme();
                 this._panel.render();
                 this._onPanelOpened();
@@ -141,6 +143,20 @@ export default class YtrawlExtension extends Extension {
         }
         this._panel = null;
         this._settings = null;
+    }
+
+    _getPanelWidth() {
+        let monitorWidth = Main.layoutManager.primaryMonitor?.width || global.stage?.width || 432;
+        try {
+            const monitor = Main.layoutManager.findMonitorForActor(this._indicator);
+            if (monitor && Number.isFinite(monitor.width)) monitorWidth = monitor.width;
+        } catch (e) {
+            // Fall back to the primary monitor when actor lookup is unavailable.
+        }
+
+        // Keep a small margin around the popup while retaining the normal
+        // preferred width on larger displays.
+        return Math.max(240, Math.min(400, Math.floor(monitorWidth - 32)));
     }
 
     _connectStageKey() {
