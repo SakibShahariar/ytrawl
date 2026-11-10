@@ -4,7 +4,7 @@
    matugen-colors.css (same as update-checker@local / github-notifier@local),
    scoped under .ytrawl-menu, which replaces the role colors below. */
 
-.ytrawl-menu { min-width: 400px; }
+/* Popup width is controlled by the active monitor's available space. */
 
 /* ---- surface / container layers ----------------------------------- */
 
